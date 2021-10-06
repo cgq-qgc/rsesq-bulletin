@@ -17,6 +17,14 @@
 \newcommand{\region}{Chaudière-Appalaches}
 \newcommand{\notes}{Notes en lien avec la station piézométriques ou les données.}
 
+%===============================================================================
+% PATHS
+%===============================================================================
+\newcommand{\pathlocal}{./cartes_puits_rsesq/Cartes_Puits_RSESQ_02G47001}
+\newcommand{\pathphoto}{./photos_puits_rsesq/photo_puit_P19_scaled}
+\newcommand{\pathschem}{./schema_puits_rsesq/schema_puits_03030008.pdf}
+\newcommand{\pathhstat}{./hydrostat_puits_rsesq/hydrostat_puits_p19}
+
 \createfooterheader{\stationid}{\municipality}
 \begin{document}
 
@@ -59,16 +67,10 @@
         }
     \posterbox[adjusted title=Localisation, valign=center, halign=center]
         {name=localisation, column=1, row=2, between=info and bottom, span=1.1}
-        {
-        \includegraphics[width=\linewidth]
-        {./cartes_puits_rsesq/Cartes_Puits_RSESQ_02G47001}
-        }
+        {\includegraphics[width=\linewidth]{\pathlocal}}
     \posterbox[adjusted title=Photo, valign=center, halign=center]
         {name=photo, column*=2, below=info, span=0.9}
-        {
-        \includegraphics[width=\linewidth]
-        {./photos_puits_rsesq/photo_puit_P19_scaled}
-        }
+        {\includegraphics[width=\linewidth]{\pathphoto}}
     \posterbox[adjusted title=Notes]
         {name=note, column*=2, between=photo and bottom, span=0.9}
         {
@@ -97,8 +99,7 @@
                valign=center, halign=center, center title]
         {name=context, column=1, between=top and bottom}
         {
-        \includegraphics[trim={1.7cm 3.5cm 2.75cm 5.25cm}, clip, height=0.95\textheight]
-        {./schema_puits_rsesq/schema_puits_03030008.pdf}
+        \includegraphics[trim={1.7cm 3.5cm 2.75cm 5.25cm}, clip, height=0.95\textheight]{\pathschem}
         }
 \end{tcbposter}
 
