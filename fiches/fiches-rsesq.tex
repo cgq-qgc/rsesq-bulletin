@@ -13,6 +13,9 @@
 
 \newcommand{\stationid}{023440005}
 \newcommand{\municipality}{Sainte-Justine}
+\newcommand{\mrc}{Les Etchemins}
+\newcommand{\region}{Chaudière-Appalaches}
+\newcommand{\notes}{Notes en lien avec la station piézométriques ou les données.}
 
 \createfooterheader{\stationid}{\municipality}
 \begin{document}
@@ -43,8 +46,8 @@
             l
             @{}}
         Municipalité (code) : \municipality{} (67020) & Longitude : -70.3709 \\ 
-        MRC : Les Etchemins & Longitude : 46.40819 \\  
-        Région : Chaudière-Appalaches & NAD : 83\\
+        MRC : \mrc{} & Longitude : 46.40819 \\  
+        Région : \region{} & NAD : 83\\
         & Élévation du sol : 401.0 m NMM\\
         \multicolumn{2}{@{}X@{}}{Nappe : libre et non influencée}\\
         \multicolumn{2}{@{}X@{}}{Type d’aquifère de l’intervalle crépiné : roc}\\
@@ -69,7 +72,7 @@
     \posterbox[adjusted title=Notes]
         {name=note, column*=2, between=photo and bottom, span=0.9}
         {
-        \fontsize{10}{12}\bodyfont{Notes en lien avec la station piézométriques ou les données.}
+        \fontsize{10}{12}\bodyfont{\notes{}}
         }
 \end{tcbposter}
 
