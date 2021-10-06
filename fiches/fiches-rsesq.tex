@@ -1,0 +1,138 @@
+\documentclass[]{fiches-rsesq}
+
+\usepackage{afterpage}
+\usepackage{pdflscape} % For putting a page in landscape format.
+\usepackage{rotating}
+
+\usepackage{graphicx} 
+\usepackage{tabularx}
+\usepackage{microtype} % Nicer spacing between words
+\usepackage[most]{tcolorbox}
+\usepackage[export]{adjustbox}  % For the "valign" and "trim" options in
+                                % \includegraphics
+
+\newcommand{\stationid}{023440005}
+\newcommand{\municipality}{Sainte-Justine}
+
+\createfooterheader{\stationid}{\municipality}
+\begin{document}
+
+
+%===============================================================================
+% PAGE 1
+%===============================================================================
+
+\noindent
+\begin{tcbposter}[
+    poster = {
+        % showframe,
+        columns = 2,
+        height= \textheight,
+        width = \textwidth, 
+        spacing=2em},
+    boxes = {colback=white, boxrule=1mm, fonttitle=\fontsize{14}{16}\boldfont,
+             colframe=blue}
+    ]
+    \posterbox[adjusted title=Information sur la station de suivi]
+        {name=info, column=1, span=2, below=top}
+        {
+        \fontsize{12}{14}\bodyfont{
+        \begin{tabularx}{\textwidth}{
+            @{}
+            >{\raggedright\arraybackslash}X
+            l
+            @{}}
+        Municipalité (code) : \municipality{} (67020) & Longitude : -70.3709 \\ 
+        MRC : Les Etchemins & Longitude : 46.40819 \\  
+        Région : Chaudière-Appalaches & NAD : 83\\
+        & Élévation du sol : 401.0 m NMM\\
+        \multicolumn{2}{@{}X@{}}{Nappe : libre et non influencée}\\
+        \multicolumn{2}{@{}X@{}}{Type d’aquifère de l’intervalle crépiné : roc}\\
+        \multicolumn{2}{@{}X@{}}{Type d’aquifère de la nappe : granulaire}\\
+        \\
+        \multicolumn{2}{@{}X@{}}{Période d’opération : date – aujourd'hui}\\
+        \multicolumn{2}{@{}X@{}}{Lacunes dans les données : aucune}\\
+        \end{tabularx}}
+        }
+    \posterbox[adjusted title=Localisation, valign=center, halign=center]
+        {name=localisation, column=1, row=2, between=info and bottom, span=1.1}
+        {
+        \includegraphics[width=\linewidth]
+        {./cartes_puits_rsesq/Cartes_Puits_RSESQ_02G47001}
+        }
+    \posterbox[adjusted title=Photo, valign=center, halign=center]
+        {name=photo, column*=2, below=info, span=0.9}
+        {
+        \includegraphics[width=\linewidth]
+        {./photos_puits_rsesq/photo_puit_P19_scaled}
+        }
+    \posterbox[adjusted title=Notes]
+        {name=note, column*=2, between=photo and bottom, span=0.9}
+        {
+        \fontsize{10}{12}\bodyfont{Notes en lien avec la station piézométriques ou les données.}
+        }
+\end{tcbposter}
+
+
+%===============================================================================
+% PAGE 2
+%===============================================================================
+\newpage
+\noindent
+\begin{tcbposter}[
+    poster = {
+        % showframe,
+        columns=1,
+        rows=1,
+        height=\textheight,
+        width=\textwidth},
+    boxes = {colback=white, boxrule=0mm, fonttitle=\fontsize{14}{16}\boldfont,
+             colframe=white, coltitle=black, left*=0pt, right*=0pt,
+             bottom=0pt}
+    ]
+    \posterbox[adjusted title=Schéma de la station de suivi,
+               valign=center, halign=center, center title]
+        {name=context, column=1, between=top and bottom}
+        {
+        \includegraphics[trim={1.7cm 3.5cm 2.75cm 5.25cm}, clip, height=0.95\textheight]
+        {./schema_puits_rsesq/schema_puits_03030008.pdf}
+        }
+\end{tcbposter}
+
+
+%===============================================================================
+% PAGE 3
+%===============================================================================
+\newpage
+
+%===============================================================================
+% PAGE 4
+%===============================================================================
+\newpage
+
+%===============================================================================
+% PAGE 5
+%===============================================================================
+\newpage
+\noindent
+\begin{tcbposter}[
+poster = {
+    showframe,
+    columns = 1,
+    rows = 1,
+    height= \textheight,
+    width = \textwidth},
+boxes = {colback=white, boxrule=0mm, fonttitle=\fontsize{14}{16}\boldfont,
+         colframe=white, coltitle=black, boxsep=0pt}
+]
+\posterbox[adjusted title=Contexte de la station  de suivi,
+           valign=center, halign=center, center title, left*=0pt, right*=0pt,
+           bottom=0pt]
+    {name=context, column=1, between=top and bottom}
+    {
+    \includegraphics[width=\linewidth]
+    {./contexte_puits_rsesq/Bulletin_Matrices_Fiche_Signaletique_02340001}
+    }
+\end{tcbposter}
+
+\end{document}
