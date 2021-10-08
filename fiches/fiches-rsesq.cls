@@ -18,7 +18,16 @@
 \LoadClass[10pt, 5p, onecolumn]{report}
 
 \pagestyle{empty}
-\RequirePackage[left=1cm, right=1cm, top=4.5cm, bottom=3.25cm]{geometry}
+
+\newcommand{\classleftmargin}{1cm}
+\newcommand{\classrightmargin}{1cm}
+\newcommand{\classtopmargin}{4.5cm}
+\newcommand{\classbottommargin}{3.25cm}
+\newcommand{\classpaperheight}{11in}
+\newcommand{\classpaperwidth}{8.5in}
+
+\RequirePackage[left=\classleftmargin, right=\classrightmargin, 
+                top=\classtopmargin, bottom=\classbottommargin]{geometry}
 
 %===============================================================================
 % COLORS 
