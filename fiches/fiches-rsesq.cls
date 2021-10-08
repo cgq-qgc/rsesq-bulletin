@@ -32,7 +32,7 @@
 %===============================================================================
 % COLORS 
 %===============================================================================
-\RequirePackage{xcolor}
+\RequirePackage[svgnames,table]{xcolor}
 \definecolor{gray}{HTML}{4D4D4D}
 \definecolor{white}{HTML}{FFFFFF}
 \definecolor{blue}{HTML}{095797}
@@ -49,15 +49,22 @@
 
 \RequirePackage[quiet]{fontspec}
 
-\newfontfamily\thinfont[Path = fonts/]{Roboto-Light}
+\newfontfamily\thinfont[Path = fonts/]{Roboto-Regular}
 \newfontfamily\bodyfont[Path = fonts/]{Roboto-Regular}
 \newfontfamily\boldfont[Path = fonts/]{Roboto-Bold}
-\newfontfamily\notefont[Path = fonts/]{Roboto-Italic}
+\newfontfamily\robotoitalic[Path = fonts/]{Roboto-Italic}
+\newfontfamily\robotoblack[Path = fonts/]{Roboto-Black}
 
 \setmainfont[Mapping=tex-text, Scale=MatchLowercase]{Roboto-Regular}
 
-\newcommand{\rolefont}{\fontsize{14pt}{24pt} %
-            \selectfont\thinfont\color{white}}
+\newcommand{\notefont}{\fontsize{10pt}{12pt} %
+            \selectfont\robotoitalic\color{black}}
+
+\newcommand{\subtitlefont}{\fontsize{20}{24} %
+            \selectfont\boldfont\color{blue}}
+
+\newcommand{\boxtitlefont}{\fontsize{14}{16} %
+            \selectfont\boldfont\color{white}}
 
 
 %===============================================================================
@@ -102,8 +109,8 @@
       {\bodyfont \thepage~de~\pageref{LastPage}}
     };
     \node [anchor=north west, xshift=1cm] (note) at (box.south west) {%
-      \fontsize{9}{12}%
-      {\notefont{Créé le 2021-04-28, MELCC, Direction de l'eau potable et des eaux souterraines}}
+      \notefont{Créé le 2021-04-28, MELCC, Direction de l'eau potable et des 
+                eaux souterraines}
     };
   \end{tikzpicture}
 }
