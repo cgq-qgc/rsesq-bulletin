@@ -11,11 +11,16 @@
 \usepackage[export]{adjustbox}  % For the "valign" and "trim" options in
                                 % \includegraphics
 
+
+%==============================================================================
+% VARIABLES
+%==============================================================================
 \newcommand{\stationid}{023440005}
 \newcommand{\municipality}{Sainte-Justine}
 \newcommand{\mrc}{Les Etchemins}
 \newcommand{\region}{Chaudière-Appalaches}
-\newcommand{\notes}{Notes en lien avec la station piézométriques ou les données.}
+\newcommand{\notes}{Notes en lien avec la station piézométrique ou les 
+données.}
 
 %===============================================================================
 % PATHS
@@ -26,12 +31,14 @@
 \newcommand{\pathhstat}{./hydrostat_puits_rsesq/hydrostat_puits_p19}
 
 \createfooterheader{\stationid}{\municipality}
+
+
 \begin{document}
 
 
-%===============================================================================
+%==============================================================================
 % PAGE 1
-%===============================================================================
+%==============================================================================
 
 \noindent
 \begin{tcbposter}[
@@ -41,8 +48,8 @@
         height= \textheight,
         width = \textwidth, 
         spacing=2em},
-    boxes = {colback=white, boxrule=1mm, fonttitle=\fontsize{14}{16}\boldfont,
-             colframe=blue}
+    boxes = {colback=white, fonttitle=\boxtitlefont, boxrule=\boxrule,
+             colframe=blue, arc=0pt, colbacktitle=blue, coltitle=white}
     ]
     \posterbox[adjusted title=Information sur la station de suivi]
         {name=info, column=1, span=2, below=top}
@@ -53,8 +60,8 @@
             >{\raggedright\arraybackslash}X
             l
             @{}}
-        Municipalité (code) : \municipality{} (67020) & Longitude : -70.3709 \\ 
-        MRC : \mrc{} & Longitude : 46.40819 \\  
+        Municipalité (code) : \municipality{} (67020) & Latitude : 46.40819 \\
+        MRC : \mrc{} & Longitude : -70.3709 \\
         Région : \region{} & NAD : 83\\
         & Élévation du sol : 401.0 m NMM\\
         \multicolumn{2}{@{}X@{}}{Nappe : libre et non influencée}\\
@@ -62,7 +69,8 @@
         \multicolumn{2}{@{}X@{}}{Type d’aquifère de la nappe : granulaire}\\
         \\
         \multicolumn{2}{@{}X@{}}{Période d’opération : date – aujourd'hui}\\
-        \multicolumn{2}{@{}X@{}}{Lacunes dans les données : aucune}\\
+        \multicolumn{2}{@{}X@{}}{Lacunes dans les données : 1973 à 1985, 
+        1995, 2014}\\
         \end{tabularx}}
         }
     \posterbox[adjusted title=Localisation, valign=center, halign=center]
