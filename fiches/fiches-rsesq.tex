@@ -103,6 +103,34 @@
 % PAGE 3
 %==============================================================================
 \newpage
+\pdfpagewidth=\classpaperheight
+\pdfpageheight=\classpaperwidth
+\paperwidth=\classpaperheight
+\paperheight=\classpaperwidth
+\textheight=\dimexpr \paperheight - \classtopmargin - \classbottommargin\relax
+\textwidth=\dimexpr \paperwidth - \classleftmargin - \classrightmargin\relax
+
+\noindent
+\begin{tcbposter}[
+    poster = {
+        % showframe,
+        columns=1,
+        rows=1,
+        height=\textheight,
+        width=\textwidth},
+    boxes = {
+        colback=white, fonttitle=\subtitlefont,
+        colframe=white, coltitle=blue, left*=0pt, right*=0pt,
+        bottom=0pt, boxrule=0pt, arc=0pt}
+    ]
+    \posterbox[adjusted title=Hydrogramme de puits,
+               valign=center, halign=center, center title]
+        {name=hydrograph, column=1, between=top and bottom}
+        {
+        \includegraphics[trim={1.25cm 3.75cm 1.25cm 3cm}, clip, 
+        height=0.95\textheight]{\pathhgraph}
+        }
+\end{tcbposter}
 
 %==============================================================================
 % PAGE 4
