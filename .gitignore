@@ -3,6 +3,11 @@
 */contexte_puits_rsesq/*
 */schema_puits_rsesq/*
 
+# LaTex
+*.bbl
+*.aux
+*.gz
+*.blg
 
 # Byte-compiled / optimized / DLL files
 __pycache__/
