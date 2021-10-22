@@ -4,13 +4,18 @@
 \usepackage{pdflscape} % For putting a page in landscape format.
 \usepackage{rotating}
 
-\usepackage{graphicx} 
+\usepackage{booktabs}  % For pretty tables formatting.
+\usepackage{graphicx}
+\usepackage{wrapfig}
 \usepackage{tabularx}
+\usepackage{multirow}
 \usepackage{microtype} % Nicer spacing between words
 \usepackage[most]{tcolorbox}
 \usepackage[export]{adjustbox}  % For the "valign" and "trim" options in
                                 % \includegraphics
+\usepackage[list-units = single, range-units = single]{siunitx}
 
+\newcommand{\boxrule}{2pt}
 
 \include{fiches-rsesq-data}
 \createfooterheader{\stationid}{\municipality}
