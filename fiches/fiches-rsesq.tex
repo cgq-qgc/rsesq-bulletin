@@ -18,13 +18,13 @@
 \newcommand{\boxrule}{2pt}
 
 \include{fiches-rsesq-data}
-\createfooterheader{\stationid}{\municipality}
+\createfooterheader{\stationid}{\munname}
+
 \begin{document}
 
 %==============================================================================
 % PAGE 1
 %==============================================================================
-
 \noindent
 \begin{tcbposter}[
     poster = {
@@ -38,27 +38,35 @@
     ]
     \posterbox[adjusted title=Information sur la station de suivi]
         {name=info, column=1, span=2, below=top}
-        {
-        \fontsize{12}{14}\bodyfont{
-        \begin{tabularx}{\textwidth}{
-            @{}
-            >{\raggedright\arraybackslash}X
-            l
-            @{}}
-        Municipalité (code) : \municipality{} (67020) & Latitude : \latitude \\
-        MRC : \mrc{} & Longitude : \longitude \\
-        Région : \region{} & NAD : 83\\
-        & Élévation du sol : 401.0 m NMM\\
-        \multicolumn{2}{@{}X@{}}{Nappe : \nappe}\\
-        \multicolumn{2}{@{}X@{}}{%
-          Type d’aquifère de l’intervalle crépiné : \aquicrepine}\\
-        \multicolumn{2}{@{}X@{}}{%
-          Type d’aquifère de la nappe : \aquinappe}\\
+        {\fontsize{12}{14}\bodyfont{
+        \begin{tabularx}{\textwidth}{%
+          @{}>{\raggedright\arraybackslash}X@{}@{}l@{}}
+        Municipalité (code) : \munname{} (\muncode) &
+        Latitude : \latitude
         \\
-        \multicolumn{2}{@{}X@{}}{Période d’opération : \operationperiod}\\
-        \multicolumn{2}{@{}X@{}}{Lacunes dans les données : \gapsdata}\\
-        \end{tabularx}}
-        }
+        MRC : \mrc{} &
+        Longitude : \longitude
+        \\
+        Région : \region{} &
+        Altitude : \altitude{}
+        \\
+        \addlinespace[1em]
+        Nappe : \typenappe &
+        Système : NAD83
+        \\
+        Type d’aquifère de l’intervalle crépiné : \aquicrepine &
+        Précision : \geosysprec
+        \\
+        \multicolumn{2}{@{}l@{}}{Type d’aquifère de la nappe : \aquinappe}
+        \\
+        \addlinespace[1em]
+        \multicolumn{2}{@{}l@{}}{Période d’opération : \operationperiod}
+        \\
+        \end{tabularx}
+        \begin{tabularx}{\textwidth}{@{}l@{}@{}X@{}}
+        Lacunes dans les données :~ & \gapsdata \\
+        \end{tabularx}
+        }}
     \posterbox[adjusted title=Localisation, valign=center, halign=center]
         {name=localisation, column=1, row=2, between=info and bottom, span=1.1}
         {\includegraphics[width=\linewidth]{\pathlocal}}
