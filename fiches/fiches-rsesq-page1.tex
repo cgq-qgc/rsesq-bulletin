@@ -1,0 +1,55 @@
+%==============================================================================
+% PAGE 1
+%==============================================================================
+\noindent
+\begin{tcbposter}[
+  poster = {
+    % showframe,
+    columns = 2,
+    height= \textheight,
+    width = \textwidth, 
+    spacing=2em},
+  boxes = {colback=white, fonttitle=\boxtitlefont, boxrule=\boxrule,
+           colframe=blue, arc=0pt, colbacktitle=blue, coltitle=white}
+  ]
+  \posterbox[adjusted title=Information sur la station de suivi]
+    {name=info, column=1, span=2, below=top}
+    {\fontsize{12}{14}\bodyfont{
+    \begin{tabularx}{\textwidth}{%
+      @{}>{\raggedright\arraybackslash}X@{}@{}l@{}}
+    Municipalité (code) : \munname{} (\muncode) &
+    Latitude : \latitude
+    \\
+    MRC : \mrc{} &
+    Longitude : \longitude
+    \\
+    Région : \region{} &
+    Altitude : \altitude{}
+    \\
+    \addlinespace[1em]
+    Nappe : \typenappe &
+    Système : NAD83
+    \\
+    Type d’aquifère de l’intervalle crépiné : \aquicrepine &
+    Précision : \geosysprec
+    \\
+    \multicolumn{2}{@{}l@{}}{Type d’aquifère de la nappe : \aquinappe}
+    \\
+    \addlinespace[1em]
+    \multicolumn{2}{@{}l@{}}{Période d’opération : \operationperiod}
+    \\
+    \end{tabularx}
+    \begin{tabularx}{\textwidth}{@{}l@{}@{}X@{}}
+    Lacunes dans les données :~ & \gapsdata \\
+    \end{tabularx}
+    }}
+  \posterbox[adjusted title=Localisation, valign=center, halign=center]
+    {name=localisation, column=1, row=2, between=info and bottom, span=1.1}
+    {\includegraphics[width=\linewidth]{\pathlocal}}
+  \posterbox[adjusted title=Photo, valign=center, halign=center]
+    {name=photo, column*=2, below=info, span=0.9}
+    {\includegraphics[width=\linewidth]{\pathphoto}}
+  \posterbox[adjusted title=Notes]
+    {name=note, column*=2, between=photo and bottom, span=0.9}
+    {\fontsize{10}{12}\bodyfont{\notes{}}}
+\end{tcbposter}
