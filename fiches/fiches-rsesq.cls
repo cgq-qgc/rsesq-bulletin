@@ -1,16 +1,14 @@
-%===============================================================================
+% -----------------------------------------------------------------------------
+% Copyright © Institut National de la Recherche Scientifique (INRS)
+% https://github.com/cgq-qgc/rsesq-bulletin
 %
-% Copyright (C) 2015 Jean-Sébastien Gosselin
+% Created by Jean-Sébastien Gosselin
+% jean-sebastien.gosselin@inrs.ca
 %
-% This work is free software: you can redistribute it and/or modify it under the terms of the CC BY-NC-SA 3.0 License as published by the Creative Commons nonprofit organization.
-%
-% This work is distributed in the hope that it will be useful, but WITHOUT ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or FITNESS FOR A PARTICULAR PURPOSE. See the CC BY-NC-SA 3.0 License for more details at http://creativecommons.org/licenses/by-nc-sa/3.0/.
-%
-% Important notes:
-% This template needs to be compiled with XeLaTeX and the bibliography, if
-% used, needs to be compiled with biber rather than bibtex.
-%
-%===============================================================================
+% This work is licensed under the terms of the CC BY 4.0 License as published
+% by the Creative Commons nonprofit organization. For more details, see the
+% CC BY 4.0 License at https://creativecommons.org/licenses/by/4.0/.
+% -----------------------------------------------------------------------------
 
 \ProvidesClass{fiches-rsesq}[2021/10/05 Fiches Signalétique RSESQ]
 \NeedsTeXFormat{LaTeX2e}
