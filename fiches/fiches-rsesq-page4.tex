@@ -1,0 +1,80 @@
+% -----------------------------------------------------------------------------
+% Copyright © Institut National de la Recherche Scientifique (INRS)
+% https://github.com/cgq-qgc/rsesq-bulletin
+%
+% Created by Jean-Sébastien Gosselin
+% jean-sebastien.gosselin@inrs.ca
+%
+% This work is licensed under the terms of the CC BY 4.0 License as published
+% by the Creative Commons nonprofit organization. For more details, see the
+% CC BY 4.0 License at https://creativecommons.org/licenses/by/4.0/.
+% -----------------------------------------------------------------------------
+
+% Hydrogramme statistique
+
+% Month abbreviation in French :
+% http://bdl.oqlf.gouv.qc.ca/bdl/gabarit_bdl.asp?id=3619
+
+\newpage
+\noindent
+\begin{tcbposter}[
+  poster = {
+    % showframe,
+    columns = 1,
+    rows = 3,
+    height= \textheight,
+    width = \textwidth},
+  boxes = {
+    colback=white, fonttitle=\subtitlefont,
+    colframe=white, coltitle=blue, boxrule=0pt, arc=0pt,
+    valign=bottom}
+    ]
+
+  \posterbox[adjusted title=Hydrogramme statistique, center title,
+             valign=bottom, halign=left, left*=1cm, right*=1cm, bottom=12pt,
+             boxsep=0pt]
+    {name=hstattext, row=1, column=1, below=top}
+    {
+    L'hydrogramme statistique présente les mesures de niveau d'eau
+    souterraine de la dernière année comparées aux percentiles des niveaux
+    mensuels observés historiquement (voir les détails dans le document
+    explicatif des fiches signalétiques).
+    }
+  \posterbox[valign=center, halign=center, center title, left*=0pt, 
+             right*=0pt, bottom=0pt, boxsep=0pt]
+    {name=hstatinfo, row=3, column=1, above=bottom}
+    {
+    \fontsize{10}{12}\bodyfont{
+    \rowcolors{4}{gray!10}{}
+    \setlength{\extrarowheight}{2pt}
+    \begin{tabular}{*9c}
+    \toprule
+    & \multirow{2}{*}{Niveau} & \multicolumn{5}{c}{percentiles} &
+    \multirow{2}{*}{Niveau} & \multirow{2}{*}{N\textsuperscript{bre}} \\
+    \cmidrule(lr){3-7}
+    & min & 10\textsuperscript{e} & 25\textsuperscript{e} &
+    50\textsuperscript{e} & 75\textsuperscript{e} & 90\textsuperscript{e} &
+    max & années \\
+    \midrule
+    Jan & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Fév & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Mar & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Avr & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Mai & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Jun & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Jui & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Aoû & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Sep & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Oct & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Nov & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    Dec & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 999.99 & 25\\
+    \bottomrule
+    \end{tabular}}
+    }
+  \posterbox[valign=bottom, halign=center, center title,
+             left*=0pt, right*=0pt, bottom=0pt, boxsep=0pt]
+    {name=hstatgraph, row=2, column=1, between=hstattext and hstatinfo}
+    {\includegraphics[height=0.5\textheight]{\pathhstat}}
+\end{tcbposter}
+
+
