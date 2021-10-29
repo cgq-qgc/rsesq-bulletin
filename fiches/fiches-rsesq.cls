@@ -64,6 +64,9 @@
 \newcommand{\boxtitlefont}{\fontsize{14}{16} %
             \selectfont\boldfont\color{white}}
 
+\newcommand{\normaltextfont}{\fontsize{10}{12} %
+            \selectfont\bodyfont\color{black}}
+
 
 %===============================================================================
 % HEADER AND FOOTER
