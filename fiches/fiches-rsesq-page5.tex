@@ -15,27 +15,27 @@
 \newpage
 \noindent
 \begin{tcbposter}[
-poster = {
-  % showframe,
-  columns = 1,
-  rows = 2,
-  height= \textheight,
-  width = \textwidth},
-boxes = {
-  colback=white, fonttitle=\subtitlefont,
-  colframe=white, coltitle=blue, arc=0pt}
-]
-\posterbox[adjusted title=Contexte de la station  de suivi, center title,
-           valign=center, halign=center, left*=1cm, right*=1cm,
-           bottom=12pt, boxsep=0pt]
-  {name=context_text, row=1, column=1, below=top}
-  {
-  Cartes montrant les conditions dans le territoire de \SI{1}{km^2} entourant 
-  la station.
-  }
-\posterbox[valign=center, halign=center, left*=0pt, right*=0pt,
-           bottom=0pt, boxsep=0pt]
-  {name=context_maps, row=2, column=1, between=context_text and bottom}
-  {\includegraphics[width=\linewidth]{\pathcontext}}
+  poster = {
+    columns = 1,
+    rows = 2,
+    height= \textheight,
+    width = \textwidth},
+  boxes = {
+    colback=white, fonttitle=\subtitlefont,
+    colframe=white, coltitle=blue, arc=0pt}
+  ]
+  \posterbox[adjusted title=Contexte de la station  de suivi, center title,
+             valign=center, halign=center, left*=1cm, right*=1cm,
+             bottom=12pt, boxsep=0pt]
+    {name=context_text, row=1, column=1, below=top}
+    {
+    \normaltextfont
+    Cartes montrant les conditions dans le territoire de \SI{1}{km^2} 
+    entourant la station.
+    }
+  \posterbox[valign=center, halign=center, left*=0pt, right*=0pt,
+             bottom=30pt, boxsep=0pt]
+    {name=context_maps, row=2, column=1, between=context_text and bottom}
+    {\includegraphics[width=\linewidth]{\pathcontext}}
 \end{tcbposter}
 \clearpage
