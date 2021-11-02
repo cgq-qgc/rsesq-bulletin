@@ -125,18 +125,22 @@ class StationDataSheet(object):
         self.type_aquifer_nappe = self._calcul_type_aquifer_nappe()
 
     def _calcul_type_aquifer_nappe(self):
-        min_wl = self.wlevels.min()[0]
-        max_wl = self.wlevels.max()[0]
-
         top_masl = self.ground_altitude - self.strati_data['Depth']
         bottom_masl = self.ground_altitude - self.strati_data['Bottom']
 
+        max_wl = max(min(
+            self.wlevels.max()[0], top_masl.max()), bottom_masl.min())
+        min_wl = max(min(
+            self.wlevels.min()[0], top_masl.max()), bottom_masl.min())
+
+        is_artesien = self.wlevels.max()[0] > top_masl.max()
+
         within_max_wl = self.strati_data[
-            (max_wl < top_masl) & (max_wl > bottom_masl)
-            ].squeeze()
+            (max_wl <= top_masl) & (max_wl >= bottom_masl)
+            ].iloc[0].squeeze()
         within_min_wl = self.strati_data[
-            (min_wl < top_masl) & (min_wl > bottom_masl)
-            ].squeeze()
+            (min_wl <= top_masl) & (min_wl >= bottom_masl)
+            ].iloc[0].squeeze()
 
         roc_graphic_classes = [
             'LIMESTONE', 'SANDSTONE', 'SHALE', 'BEDROCK', 'BASALT']
