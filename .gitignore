@@ -1,7 +1,10 @@
-*/cartes_puits_rsesq/*
-*/photos_puits_rsesq/*
-*/schema_puits_rsesq/*
-*/matrices_contexte/*
+*/img_cartes_localisation_puits/*
+*/img_fonction_reponse_baro/*
+*/img_hydrogrammes/*
+*/img_hydrogrammes_statistiques/*
+*/img_matrices_contexte/*
+*/img_photos_puits/*
+*/img_schema_puits/*
 
 # LaTex
 *.bbl
