@@ -213,13 +213,34 @@ class DataSheetCreator(object):
         super().__init__()
         self.workdir = "C:/Users/User/rsesq-bulletin"
 
-        self._dirphoto = "img_photos_puits"
-        self._dircontext = "img_matrices_contexte"
-        self._dirhstat = "img_hydrogrammes_statistiques"
-        self._dirhgraph = "img_hydrogrammes"
-        self._dirschema = "img_schema_puits"
-        self._dirbrf = "img_fonction_reponse_baro"
-        self._dirlocal = "img_cartes_localisation_puits"
+        self._dirphoto = osp.join(
+            self.workdir, 'fiches', "img_photos_puits")
+        if not osp.exists(self._dirphoto):
+            os.makedirs(self._dirphoto)
+        self._dircontext = osp.join(
+            self.workdir, 'fiches', "img_matrices_contexte")
+        if not osp.exists(self._dircontext):
+            os.makedirs(self._dircontext)
+        self._dirhstat = osp.join(
+            self.workdir, 'fiches', "img_hydrogrammes_statistiques")
+        if not osp.exists(self._dirhstat):
+            os.makedirs(self._dirhstat)
+        self._dirhgraph = osp.join(
+            self.workdir, 'fiches', "img_hydrogrammes")
+        if not osp.exists(self._dirhgraph):
+            os.makedirs(self._dirhgraph)
+        self._dirschema = osp.join(
+            self.workdir, 'fiches', "img_schema_puits")
+        if not osp.exists(self._dirschema):
+            os.makedirs(self._dirschema)
+        self._dirbrf = osp.join(
+            self.workdir, 'fiches', "img_fonction_reponse_baro")
+        if not osp.exists(self._dirbrf):
+            os.makedirs(self._dirbrf)
+        self._dirlocal = osp.join(
+            self.workdir, 'fiches', "img_cartes_localisation_puits")
+        if not osp.exists(self._dirlocal):
+            os.makedirs(self._dirlocal)
 
         self.munic_s = gpd.read_file(
             osp.join(self.workdir, "SDA_ 2018-05-25.gdb.zip"),
@@ -291,11 +312,7 @@ class DataSheetCreator(object):
             station_uuid, attachment_type=1)
 
         if data is not None:
-            dirname = osp.join(self.workdir, 'fiches', self._dirschema)
-            if not osp.exists(dirname):
-                os.makedirs(dirname)
-
-            filename = osp.join(dirname, name).replace('\\', '/')
+            filename = osp.join(self._dirschema, name).replace('\\', '/')
             if not osp.exists(filename):
                 with open(filename, 'wb') as f:
                     f.write(data)
@@ -399,7 +416,7 @@ class DataSheetCreator(object):
         # Filepaths
         # =====================================================================
         pathlocal = osp.join(
-            self.workdir, 'fiches', self._dirlocal,
+            self._dirlocal,
             'Cartes_Puits_RSESQ_{}.pdf'.format(station_name)
             ).replace('\\', '/')
         if not osp.exists(pathlocal):
@@ -410,11 +427,8 @@ class DataSheetCreator(object):
         pathhgraph = ''
         if not datasheet.readings_data.empty:
             print("Creating the well hydrograph...")
-            dirname = osp.join(self.workdir, 'fiches', self._dirhgraph)
-            if not osp.exists(dirname):
-                os.makedirs(dirname)
             pathhgraph = osp.join(
-                dirname,
+                self._dirhgraph,
                 'hydrogramme_{}.pdf'.format(station_name)
                 ).replace('\\', '/')
             datasheet.create_hydrograph(pathhgraph)
@@ -422,22 +436,19 @@ class DataSheetCreator(object):
         pathhstat = ''
         if not datasheet.readings_data.empty and datasheet.is_station_active:
             print("Creating the statistitical hydrograph...")
-            dirname = osp.join(
-                self.workdir, 'fiches', self._dirhstat)
-            if not osp.exists(dirname):
-                os.makedirs(dirname)
             pathhstat = osp.join(
-                dirname, 'hydrostat_{}.pdf'.format(station_name)
+                self._dirhstat,
+                'hydrostat_{}.pdf'.format(station_name)
                 ).replace('\\', '/')
             datasheet.create_statistical_hydrograph(pathhstat)
 
         pathcontext = osp.join(
-            self.workdir, 'fiches', self._dircontext,
+            self._dircontext,
             'Matrices_Puits_RSESQ_{}.pdf'.format(station_name)
             ).replace('\\', '/')
 
         pathphoto = osp.join(
-            self.workdir, 'fiches', self._dirphoto,
+            self._dirphoto,
             "photo_puit_{}.jpg".format(station_name)
             ).replace('\\', '/')
         if not osp.exists(pathphoto):
@@ -446,7 +457,7 @@ class DataSheetCreator(object):
                 ).replace('\\', '/')
 
         pathbrf = osp.join(
-            self.workdir, 'fiches', self._dirbrf,
+            self._dirbrf,
             "fonction_reponse_baro_{}.pdf".format(station_name)
             ).replace('\\', '/')
 
