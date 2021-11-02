@@ -151,8 +151,15 @@ class StationDataSheet(object):
             'roc' if within_max_wl['Graphic'] in
             roc_graphic_classes else 'granulaire')
 
-        return ' et '.join(
-            list(set([aquitype_min_wl, aquitype_max_wl])))
+        aquitypes_wl = list(set([aquitype_min_wl, aquitype_max_wl]))
+        if is_artesien:
+            aquitypes_wl.insert(0, 'hors-sol')
+        if len(aquitypes_wl) == 3:
+            return "{}, {} et {}".format(*aquitypes_wl)
+        elif len(aquitypes_wl) == 2:
+            return "{} et {}".format(*aquitypes_wl)
+        else:
+            return "{}".format(*aquitypes_wl)
 
     def create_percentiles_table(self):
         percentiles, nyear = compute_monthly_percentiles(
