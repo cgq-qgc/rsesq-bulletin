@@ -32,6 +32,10 @@
 \newcommand{\boxrule}{2pt}
 \newcolumntype{Y}{>{\centering\arraybackslash}X}
 
+% This is requires to make the start row of \rowcolors work in tabularx.
+% https://tex.stackexchange.com/a/297357/72419
+\newcounter{tblerows}
+\expandafter\let\csname c@tblerows\endcsname\rownum
 
 \input{fiches-rsesq-station}
 
