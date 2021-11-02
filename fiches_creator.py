@@ -519,6 +519,15 @@ class DataSheetCreator(object):
             cwd=osp.join(self.workdir, 'fiches')
             )
 
+        src = osp.join(
+            self.workdir, 'fiches', "fiches-rsesq.pdf")
+        dst = osp.join(
+            self.workdir, 'fiches', 'pdf_fiches_stations',
+            "fiche_{}.pdf".format(station_name))
+        if not osp.exists(osp.dirname(dst)):
+            os.makedirs(osp.dirname(dst))
+        shutil.copyfile(src, dst)
+
         print("Fiche created successfully for station {}."
               .format(station_name))
 
