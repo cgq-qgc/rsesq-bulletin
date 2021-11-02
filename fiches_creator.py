@@ -39,7 +39,7 @@ import itertools
 
 # Month abbreviation in French :
 # http://bdl.oqlf.gouv.qc.ca/bdl/gabarit_bdl.asp?id=3619
-MONTHSABB = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun', 
+MONTHSABB = ['Jan', 'Fév', 'Mar', 'Avr', 'Mai', 'Jun',
              'Jui', 'Aoû', 'Sep', 'Oct', 'Nov', 'Dec']
 
 
