@@ -31,6 +31,7 @@ from sardes.tools.hydrographs import HydrographCanvas
 from sardes.tools.hydrostats import (
     SatisticalHydrographCanvas, compute_monthly_percentiles)
 from sardes.utils.data_operations import format_reading_data
+import shutil
 
 import pandas as pd
 import numpy as np
@@ -196,9 +197,18 @@ class StationDataSheet(object):
 
 
 class DataSheetCreator(object):
+
     def __init__(self):
         super().__init__()
         self.workdir = "C:/Users/User/rsesq-bulletin"
+
+        self._dirphoto = "img_photos_puits"
+        self._dircontext = "img_matrices_contexte"
+        self._dirhstat = "img_hydrogrammes_statistiques"
+        self._dirhgraph = "img_hydrogrammes"
+        self._dirschema = "img_schema_puits"
+        self._dirbrf = "img_fonction_reponse_baro"
+        self._dirlocal = "img_cartes_localisation_puits"
 
         self.munic_s = gpd.read_file(
             osp.join(self.workdir, "SDA_ 2018-05-25.gdb.zip"),
@@ -270,7 +280,7 @@ class DataSheetCreator(object):
             station_uuid, attachment_type=1)
 
         if data is not None:
-            dirname = osp.join(self.workdir, 'fiches', 'schema_puits_rsesq')
+            dirname = osp.join(self.workdir, 'fiches', self._dirschema)
             if not osp.exists(dirname):
                 os.makedirs(dirname)
 
@@ -377,13 +387,19 @@ class DataSheetCreator(object):
         # =====================================================================
         # Filepaths
         # =====================================================================
-        pathlocal = "./cartes_puits_rsesq/Cartes_Puits_RSESQ_{}".format(
-            station_name)
+        pathlocal = osp.join(
+            self.workdir, 'fiches', self._dirlocal,
+            'Cartes_Puits_RSESQ_{}.pdf'.format(station_name)
+            ).replace('\\', '/')
+        if not osp.exists(pathlocal):
+            pathlocal = osp.join(
+                self.workdir, 'fiches', "contexte_puits_non_disponible.pdf"
+                ).replace('\\', '/')
 
         pathhgraph = ''
         if not datasheet.readings_data.empty:
             print("Creating the well hydrograph...")
-            dirname = osp.join(self.workdir, 'fiches', 'hydrogrammes')
+            dirname = osp.join(self.workdir, 'fiches', self._dirhgraph)
             if not osp.exists(dirname):
                 os.makedirs(dirname)
             pathhgraph = osp.join(
@@ -396,7 +412,7 @@ class DataSheetCreator(object):
         if not datasheet.readings_data.empty and datasheet.is_station_active:
             print("Creating the statistitical hydrograph...")
             dirname = osp.join(
-                self.workdir, 'fiches', 'hydrogrammes_statistiques')
+                self.workdir, 'fiches', self._dirhstat)
             if not osp.exists(dirname):
                 os.makedirs(dirname)
             pathhstat = osp.join(
@@ -405,12 +421,24 @@ class DataSheetCreator(object):
             datasheet.create_statistical_hydrograph(pathhstat)
 
         pathcontext = osp.join(
-            self.workdir, 'fiches', 'matrices_contexte',
+            self.workdir, 'fiches', self._dircontext,
             'Matrices_Puits_RSESQ_{}.pdf'.format(station_name)
             ).replace('\\', '/')
 
-        pathphoto = "./photos_puits_rsesq/photo_puit_P19_scaled"
-        pathbrf = "./brf_puits_rsesq/brf_puits_03040001"
+        pathphoto = osp.join(
+            self.workdir, 'fiches', self._dirphoto,
+            "photo_puit_{}.jpg".format(station_name)
+            ).replace('\\', '/')
+        if not osp.exists(pathphoto):
+            pathphoto = osp.join(
+                self.workdir, 'fiches', "photo_non_disponible.pdf"
+                ).replace('\\', '/')
+
+        pathbrf = osp.join(
+            self.workdir, 'fiches', self._dirbrf,
+            "fonction_reponse_baro_{}.pdf".format(station_name)
+            ).replace('\\', '/')
+
         pathschem = self.create_schema_for_station(station_name)
 
         content += [
@@ -466,6 +494,8 @@ class DataSheetCreator(object):
             osp.exists(pathcontext) else
             r"\newcommand{\inputpagefive}{}")
         content.append(
+            r"\newcommand{\inputpagesix}{\input{fiches-rsesq-page6}}" if
+            osp.exists(pathbrf) else
             r"\newcommand{\inputpagesix}{}")
         content.append("")
 
@@ -497,6 +527,7 @@ if __name__ == '__main__':
     dscreator = DataSheetCreator()
     # dscreator.build_datasheet_for_station('02507001')
     # dscreator.build_datasheet_for_station('02257001')
+    datasheet = dscreator.build_datasheet_for_station('03030008')
     datasheet = dscreator.build_datasheet_for_station('02G47001')
     # datasheet = dscreator.datasheet('02G47001')
     # datasheet = dscreator.datasheet('02507001')
