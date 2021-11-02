@@ -556,9 +556,19 @@ class DataSheetCreator(object):
 
 if __name__ == '__main__':
     dscreator = DataSheetCreator()
-    # dscreator.build_datasheet_for_station('02507001')
-    # dscreator.build_datasheet_for_station('02257001')
-    datasheet = dscreator.build_datasheet_for_station('03030008')
-    datasheet = dscreator.build_datasheet_for_station('02G47001')
-    # datasheet = dscreator.datasheet('02G47001')
+
+    station_names = []
+    for index, data in dscreator.stations.iterrows():
+        station_name = data['obs_well_id']
+        context_filepath = osp.join(
+            dscreator._dirlocal,
+            'Cartes_Puits_RSESQ_{}.pdf'.format(station_name))
+        if not osp.exists(context_filepath):
+            continue
+        station_names.append(station_name)
+        dscreator.build_datasheet_for_station(station_name)
+
+    # datasheet = dscreator.build_datasheet_for_station('02000006')
+    # datasheet = dscreator.build_datasheet_for_station('03030008')
+    # datasheet = dscreator.build_datasheet_for_station('02G47001')
     # datasheet = dscreator.datasheet('02507001')
