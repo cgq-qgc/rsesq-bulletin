@@ -253,7 +253,8 @@ class InfoClimatGridReader(object):
             connect_table['loc_lat_dd'].values,
             connect_table['loc_lon_dd'].values,
             connect_table['grid_lat_dd'].values,
-            connect_table['grid_lon_dd'].values)
+            connect_table['grid_lon_dd'].values
+            ).round(2)
 
         return connect_table
 
