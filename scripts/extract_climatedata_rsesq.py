@@ -4,7 +4,6 @@ Created on Tue Nov 16 16:27:49 2021
 @author: User
 """
 import sys
-import datetime
 
 sys.path.append('C:/Users/User/rsesq-bulletin')
 sys.path.append('C:/Users/User/sardes')
