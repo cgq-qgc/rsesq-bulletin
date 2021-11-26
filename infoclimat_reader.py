@@ -142,8 +142,9 @@ class InfoClimatGridReader(object):
     def __init__(self, dirpath_netcdf: str | Path):
         super().__init__()
         self.dirpath_netcdf = dirpath_netcdf
-        self.grid_latdd = np.array([])
-        self.grid_londd = np.array([])
+        self._grid_latdd = np.array([])
+        self._grid_londd = np.array([])
+        self._nan_grid_mask = np.array([])
         self._setup_grid()
 
     @timethis
@@ -155,15 +156,22 @@ class InfoClimatGridReader(object):
         # simply load the grid from the first file of the grid contained
         # in 'dirpath_netcdf'.
         for file in os.listdir(self.dirpath_netcdf):
-            if file.endswith('.nc'):
+            if file.endswith('.nc') and file.startswith('TMOY'):
                 break
         else:
             return
 
-        ncfilepath = osp.join(self.dirpath_netcdf, file)
-        with netCDF4.Dataset(ncfilepath, 'r+') as ncdset:
-            self.grid_latdd = np.array(ncdset['lat']).flatten()
-            self.grid_londd = np.array(ncdset['lon']).flatten()
+        ncdset = netCDF4.Dataset(osp.join(self.dirpath_netcdf, file), 'r+')
+        self._grid_latdd = np.array(ncdset['lat']).flatten()
+        self._grid_londd = np.array(ncdset['lon']).flatten()
+
+        # Define a mask to identify the cells of the grid with no data.
+        array = np.array(ncdset['TMOY'])
+        array = array.reshape(array.shape[0], -1)
+        array[array < -999] = np.nan
+        self._nan_grid_mask = np.isnan(array).all(axis=0)
+
+        ncdset.close()
 
     def _get_idx_from_latlon(self, latitudes: list[float],
                              longitudes: list[float]) -> list[int]:
@@ -247,8 +255,8 @@ class InfoClimatGridReader(object):
         indexes = self._get_idx_from_latlon(lat_dd, lon_dd)
 
         connect_table['grid_idx'] = indexes
-        connect_table['grid_lat_dd'] = self.grid_latdd[indexes]
-        connect_table['grid_lon_dd'] = self.grid_londd[indexes]
+        connect_table['grid_lat_dd'] = self._grid_latdd[indexes]
+        connect_table['grid_lon_dd'] = self._grid_londd[indexes]
         connect_table['dist_km'] = calc_dist_from_coord(
             connect_table['loc_lat_dd'].values,
             connect_table['loc_lon_dd'].values,
