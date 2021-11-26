@@ -196,11 +196,30 @@ class InfoClimatGridReader(object):
             A list containing the flattened grid indexes of the cells
             containint the location at which climate data is to be extracted.
         """
-        return [
+        lat_max = np.max(latitudes) + 1
+        lat_min = np.min(latitudes) - 1
+        lon_max = np.max(longitudes) + 1
+        lon_min = np.min(longitudes) - 1
+
+        mask = (
+            (self._grid_latdd <= lat_max) &
+            (self._grid_latdd >= lat_min) &
+            (self._grid_londd <= lon_max) &
+            (self._grid_londd >= lon_min) &
+            (~self._nan_grid_mask)
+            )
+
+        masked_grid_latdd = self._grid_latdd[mask]
+        masked_grid_londd = self._grid_londd[mask]
+
+        grid_idx = np.arange(len(self._grid_latdd))
+        masked_grid_idx = [
             np.argmin(calc_dist_from_coord(
-                lat, lon, self.grid_latdd, self.grid_londd)) for
+                lat, lon, masked_grid_latdd, masked_grid_londd)) for
             lat, lon in zip(latitudes, longitudes)
             ]
+
+        return grid_idx[mask][masked_grid_idx]
 
     def create_connect_table(self, lat_dd: list[float], lon_dd: list[float],
                              loc_id: list = None) -> ConnectTable:
