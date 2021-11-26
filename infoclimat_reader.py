@@ -262,6 +262,7 @@ class InfoClimatGridReader(object):
               climate data is to be extracted and the location of the
               corresponding cells of the grid.
         """
+        print("Creating a connection table...")
         connect_table = ConnectTable([])
 
         if loc_id is None:
