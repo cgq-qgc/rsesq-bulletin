@@ -245,10 +245,10 @@ def plot_pdf_precip(precip_norm: list, precip_pdf: list, precip_win: int,
     return fig
 
 
-def plot_cross_corr(std_indexes):
+def plot_cross_corr(std_indexes, staname):
     x = std_indexes['SPLI_corr'].values.astype(float)
     y = std_indexes['SPI_ref'].values.astype(float)
-    shifts = np.arange(-12, 13)
+    shifts = np.arange(-24, 25)
     corrcoeffs = []
     for shift in shifts:
         if shift < 0:
@@ -265,10 +265,15 @@ def plot_cross_corr(std_indexes):
 
     ax.set_ylabel('Corrélation', labelpad=15, fontsize=14)
     ax.set_xlabel('Décalage SPLI p/r SPI (mois)', labelpad=10, fontsize=14)
-    ax.set_xticks(shifts[::2])
+    ax.set_xticks(shifts[::4])
     ax.set_xticks(shifts, minor=True)
-    ax.axis(xmin=-12, xmax=12)
-    fig.tight_layout()
+    ax.axis(xmin=-24, xmax=24)
+
+    fig.suptitle(f"Station {staname}", fontsize=16)
+
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.subplots_adjust(top=0.85)
+
     return fig
 
 
