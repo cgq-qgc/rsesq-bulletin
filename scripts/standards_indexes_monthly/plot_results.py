@@ -111,12 +111,15 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
     spi = std_indexes['SPI_ref']
     spli_corr = std_indexes['SPLI_corr']
 
+    precip_win = std_indexes.attrs['precip_win']
+    wlvl_win = std_indexes.attrs['wlvl_win']
+
     axs[2].plot(spli_corr.index, spli_corr.values,
                 marker='None', ls='-', color=COLORS['blue dark'],
-                label='SPLI_3mois corrigés')
+                label=f'SPLI_{wlvl_win}mois corrigés')
     axs[2].plot(spi.index, spi.values,
                 marker='None', color=COLORS['Precip'], zorder=5,
-                label='SPI_12mois (1981-2010)')
+                label=f'SPI_{precip_win}mois (1981-2010)')
 
     axs[2].set_ylabel("Écart normalisé")
     axs[2].grid(visible=True, which='major', axis='y',
@@ -221,8 +224,9 @@ def plot_spli_vs_classes(std_indexes, staname):
     ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
 
     # setup y-ticks.
+    wlvl_win = std_indexes.attrs['wlvl_win']
     ax.set_yticks([-1.28, -0.84, -0.25, 0.25, 0.84, 1.28])
-    ax.set_ylabel('SPLI_3mois corrigés', fontsize=14, labelpad=15)
+    ax.set_ylabel(f'SPLI_{wlvl_win}mois corrigés', fontsize=14, labelpad=15)
 
     # Setup grid.
     ax.grid(visible=True, which='both', axis='x', color='black',
