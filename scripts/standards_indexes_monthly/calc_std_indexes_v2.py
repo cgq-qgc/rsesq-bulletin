@@ -12,6 +12,7 @@ import os.path as osp
 import pandas as pd
 import numpy as np
 from datetime import datetime
+import matplotlib
 import matplotlib.pyplot as plt
 import matplotlib.dates as mdates
 from scipy.stats import norm
@@ -19,6 +20,7 @@ from scipy.stats import norm
 os.chdir(osp.dirname(__file__))
 from selected_stations import selected_stations
 from plot_results import plot_spli_overview
+matplotlib.rcParams['axes.unicode_minus'] = False
 plt.close('all')
 
 MONTH_NAMES = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
