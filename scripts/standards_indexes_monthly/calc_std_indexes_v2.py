@@ -116,8 +116,8 @@ def calc_std_indexes(staname, dirname,
         spi = (precip_m.values - loc) / scale
         std_indexes.loc[precip_m.index, ('SPI', m)] = spi
 
-        # Calcul des paramètres d'un modèle de régression linéaire qui permettra
-        # de corriger les SPLI.
+        # Calcul des paramètres d'un modèle de régression linéaire qui
+        # permettra de corriger les SPLI.
         p = np.polyfit(spi_ref, spi, deg=1)
 
         # Calcul des SPLI.
@@ -139,6 +139,8 @@ def calc_std_indexes(staname, dirname,
     # =========================================================================
     # Sauvegarde des calculs
     # =========================================================================
+    print("Saving results for station {}...".format(staname))
+
     std_indexes = std_indexes.stack(level=1, dropna=False)
     std_indexes['day'] = 1
     std_indexes = std_indexes.reset_index()
@@ -153,22 +155,23 @@ def calc_std_indexes(staname, dirname,
     # =========================================================================
     # fig = plot_spi_vs_spli(std_indexes, staname, precip_win, wlvl_win)
     # fig.savefig(osp.join(outdir, 'spi_vs_spli.pdf'))
+    print("Plotting results for station {}...".format(staname))
 
     fig = plot_spli_overview(
         staname, sta_wl_daily, sta_precip_daily, std_indexes)
     fig.savefig(osp.join(outdir, 'spi_vs_spli.pdf'))
 
-    fig2 = plot_pdf_niveau(wlvl_norm, wlvl_pdf, wlvl_win)
+    fig2 = plot_pdf_niveau(wlvl_norm, wlvl_pdf, wlvl_win, staname)
     fig2.savefig(osp.join(outdir, f'pdf_niveau_{wlvl_win}_mois.pdf'))
 
-    fig3 = plot_pdf_precip(precip_norm, precip_pdf, precip_win)
+    fig3 = plot_pdf_precip(precip_norm, precip_pdf, precip_win, staname)
     fig3.savefig(osp.join(outdir, f'pdf_precip_{precip_win}_mois.pdf'))
 
-    fig4 = plot_cross_corr(std_indexes)
+    fig4 = plot_cross_corr(std_indexes, staname)
     fig4.savefig(osp.join(outdir, 'correlation_croisee.pdf'))
 
     fig5 = plot_spli_vs_classes(std_indexes, staname)
-    fig5.savefig(osp.join(outdir, 'spli_vs_bandes_couleurs.pdf'))
+    fig5.savefig(osp.join(outdir, 'spli_vs_classes.pdf'))
 
     figures = (fig, fig2, fig3, fig4, fig5)
     return std_indexes, figures
