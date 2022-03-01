@@ -321,14 +321,16 @@ def plot_spli_vs_classes(std_indexes, staname):
     xmax = datetime(year_max, 1, 1)
     ax.axis(xmin=xmin, xmax=xmax, ymin=y_min, ymax=y_max)
 
-    ax.xaxis.set_major_locator(mdates.YearLocator(
-        base=base, month=1, day=1))
-    ax.xaxis.set_major_formatter(
-        mdates.DateFormatter('%Y-%m-%d'))
+    ax.xaxis.set_major_locator(mdates.YearLocator(base=base, month=1, day=1))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
 
     # setup y-ticks.
     ax.set_yticks([-1.28, -0.84, -0.25, 0.25, 0.84, 1.28])
     ax.set_ylabel('SPLI_3mois corrigés', fontsize=14, labelpad=15)
+
+    # Setup grid.
+    ax.grid(visible=True, which='both', axis='x', color='black',
+            linestyle='--', linewidth=0.5)
 
     # Setup minor x-ticks.
     if base > 1:
