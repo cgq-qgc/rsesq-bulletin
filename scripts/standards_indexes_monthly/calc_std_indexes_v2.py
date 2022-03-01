@@ -14,7 +14,6 @@ import numpy as np
 from datetime import datetime
 import matplotlib
 import matplotlib.pyplot as plt
-import matplotlib.dates as mdates
 from scipy.stats import norm
 
 os.chdir(osp.dirname(__file__))
@@ -37,16 +36,11 @@ WLVL_DAILY_ALL = pd.read_csv(
     index_col=[0], parse_dates=[0])
 
 
-def calc_std_indexes(staname, dirname,
-                     precip_win: int = 12, wlvl_win: int = 3):
-    print("Calculating standard indexes for station {}...".format(staname))
-    outdir = osp.join(dirname, staname)
-    if not osp.exists(outdir):
-        os.makedirs(outdir)
-
+def calc_std_indexes(staname, precip_win: int = 12, wlvl_win: int = 3):
     # =========================================================================
     # Préparation des séries mensuelles
     # =========================================================================
+    print("Calculating standard indexes for station {}...".format(staname))
 
     # Construction d'une série de précipitations mensuelles.
     sta_precip_daily = (
@@ -150,7 +144,6 @@ def calc_std_indexes(staname, dirname,
         std_indexes[['year', 'month', 'day']])
     std_indexes = std_indexes[['SPI_ref', 'SPI', 'SPLI', 'SPLI_corr']]
     std_indexes.index.name = 'Date/Time'
-    std_indexes.to_csv(osp.join(outdir, 'std_indexes_resultats.csv'))
 
     # =========================================================================
     # Plot results
@@ -158,57 +151,41 @@ def calc_std_indexes(staname, dirname,
     print("Plotting results for station {}...".format(staname))
     fig = plot_spli_overview(
         staname, sta_wl_daily, sta_precip_daily, std_indexes)
-    fig.savefig(osp.join(outdir, 'spi_vs_spli.pdf'))
 
     fig2 = plot_pdf_niveau(wlvl_norm, wlvl_pdf, wlvl_win, staname)
-    fig2.savefig(osp.join(outdir, f'pdf_niveau_{wlvl_win}_mois.pdf'))
-
     fig3 = plot_pdf_precip(precip_norm, precip_pdf, precip_win, staname)
-    fig3.savefig(osp.join(outdir, f'pdf_precip_{precip_win}_mois.pdf'))
-
     fig4 = plot_cross_corr(std_indexes, staname)
-    fig4.savefig(osp.join(outdir, 'correlation_croisee.pdf'))
-
     fig5 = plot_spli_vs_classes(std_indexes, staname)
-    fig5.savefig(osp.join(outdir, 'spli_vs_classes.pdf'))
 
     figures = (fig, fig2, fig3, fig4, fig5)
-
-    std_indexes.attrs['precip_win'] = precip_win
-    std_indexes.attrs['wlvl_win'] = wlvl_win
 
     return std_indexes, figures
 
 
 # %%
-plt.ion()
+plt.ioff()
 
-PRECIP_WIN = 3
-WLVL_WIN = 3
-
-DIRNAME = osp.join(
-    WORKDIR,
-    f'results_std_indexes_spi_{PRECIP_WIN}_spli_{WLVL_WIN}')
+WLVL_WIN = 6
+PRECIP_WIN = 6
 
 figures_stack = []
 std_indexes_stack = []
 for staname in selected_stations:
     std_indexes, figures = calc_std_indexes(
         staname=staname,
-        dirname=DIRNAME,
         precip_win=PRECIP_WIN,
         wlvl_win=WLVL_WIN)
     figures_stack.append(figures)
     std_indexes_stack.append(std_indexes)
     plt.close('all')
 
-
+DIRNAME = osp.join(osp.dirname(__file__), 'results_std_indexes')
 FILENAMES = [
-    f'spi_vs_spli_{PRECIP_WIN}_spli_{WLVL_WIN}.pdf',
-    f'pdf_niveau_{PRECIP_WIN}_spli_{WLVL_WIN}.pdf',
-    f'pdf_precip_{PRECIP_WIN}_spli_{WLVL_WIN}.pdf',
-    f'correlation_croisee_{PRECIP_WIN}_spli_{WLVL_WIN}.pdf',
-    f'spli_vs_classes_{PRECIP_WIN}_spli_{WLVL_WIN}.pdf']
+    f'(spi{PRECIP_WIN}_spli{WLVL_WIN}) spi_vs_spli.pdf',
+    f'(spi{PRECIP_WIN}_spli{WLVL_WIN}) pdf_niveau.pdf',
+    f'(spi{PRECIP_WIN}_spli{WLVL_WIN}) pdf_precip.pdf',
+    f'(spi{PRECIP_WIN}_spli{WLVL_WIN}) correlation_croisee.pdf',
+    f'(spi{PRECIP_WIN}_spli{WLVL_WIN}) spli_vs_classes.pdf']
 for i, filename in enumerate(FILENAMES):
     filepath = osp.join(DIRNAME, filename)
     with PdfPages(filepath) as pdf:
