@@ -209,7 +209,72 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
 
     return fig
 
-# print('Saving the results to the PDF file...')
-# with PdfPages('standard_index_results (min-mean-max).pdf') as pdf:
-#     for fig in figures:
-#         pdf.savefig(fig)
+
+def plot_spli_vs_classes(std_indexes, staname):
+    fig, ax = plt.subplots(figsize=(10, 5))
+
+    colors = {
+        'tres_bas': "#db442c",
+        'bas': '#f18e00',
+        'mod_bas': '#ffdd57',
+        'proche_moy': '#6dc55a',
+        'mod_haut': '#32a9dd',
+        'haut': '#1b75bb',
+        'tres_haut': '#286273'
+        }
+
+    ax.axhspan(-10, -1.28, color=colors['tres_bas'])
+    ax.axhspan(-1.28, -0.84, color=colors['bas'])
+    ax.axhspan(-0.84, -0.25, color=colors['mod_bas'])
+    ax.axhspan(-0.25, 0.25, color=colors['proche_moy'])
+    ax.axhspan(0.25, 0.84, color=colors['mod_haut'])
+    ax.axhspan(0.84, 1.28, color=colors['haut'])
+    ax.axhspan(1.28, 10, color=colors['tres_haut'])
+
+    ax.plot(std_indexes['SPLI_corr'], color='black')
+
+    y_min = min(std_indexes['SPLI_corr'].dropna().min(), 2010)
+    y_max = std_indexes['SPLI_corr'].dropna().max()
+    y_min -= (y_max - y_min) * 0.05
+    y_max += (y_max - y_min) * 0.05
+
+    # Setup xaxis.
+    year_min = std_indexes['SPLI_corr'].dropna().index.min().year
+    year_max = std_indexes['SPLI_corr'].dropna().index.max().year + 1
+    delta_year = year_max - year_min
+
+    if delta_year <= 15:
+        base = 1
+    elif delta_year <= 30:
+        base = 2
+    else:
+        base = 5
+
+    xmin = datetime(year_min, 1, 1)
+    xmax = datetime(year_max, 1, 1)
+    ax.axis(xmin=xmin, xmax=xmax, ymin=y_min, ymax=y_max)
+
+    ax.xaxis.set_major_locator(mdates.YearLocator(base=base, month=1, day=1))
+    ax.xaxis.set_major_formatter(mdates.DateFormatter('%Y'))
+
+    # setup y-ticks.
+    ax.set_yticks([-1.28, -0.84, -0.25, 0.25, 0.84, 1.28])
+    ax.set_ylabel('SPLI_3mois corrigés', fontsize=14, labelpad=15)
+
+    # Setup grid.
+    ax.grid(visible=True, which='both', axis='x', color='black',
+            linestyle='--', linewidth=0.5)
+
+    # Setup minor x-ticks.
+    if base > 1:
+        ax.xaxis.set_minor_locator(mdates.YearLocator(
+            base=1, month=1, day=1))
+        ax.tick_params(axis='x', which='minor', bottom=True)
+
+    fig.autofmt_xdate()
+    fig.suptitle("Station {}".format(staname), fontsize=16)
+
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.subplots_adjust(top=0.9)
+
+    return fig
