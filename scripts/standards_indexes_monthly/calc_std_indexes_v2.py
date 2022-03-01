@@ -24,7 +24,7 @@ plt.close('all')
 MONTH_NAMES = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
                'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
 
-dirname = osp.dirname(__file__)
+WORKDIR = osp.dirname(__file__)
 PRECIP_DAILY_ALL = pd.read_csv(
     'precip_daily_2022-02-28.csv',
     index_col=[0], parse_dates=[0])
@@ -35,9 +35,8 @@ WLVL_DAILY_ALL = pd.read_csv(
 
 
 def calc_std_indexes(staname, dirname,
-                     precip_win: int = 12,
-                     wlvl_win: int = 3):
-
+                     precip_win: int = 12, wlvl_win: int = 3):
+    print("Calculating standard indexes for station {}...".format(staname))
     outdir = osp.join(dirname, staname)
     if not osp.exists(outdir):
         os.makedirs(outdir)
