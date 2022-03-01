@@ -22,6 +22,8 @@ from selected_stations import selected_stations
 from plot_results import (
     plot_spli_overview, plot_spli_vs_classes,
     plot_pdf_niveau, plot_pdf_precip, plot_cross_corr)
+from matplotlib.backends.backend_pdf import PdfPages
+
 matplotlib.rcParams['axes.unicode_minus'] = False
 plt.close('all')
 
@@ -171,20 +173,44 @@ def calc_std_indexes(staname, dirname,
     fig5.savefig(osp.join(outdir, 'spli_vs_classes.pdf'))
 
     figures = (fig, fig2, fig3, fig4, fig5)
+
+    std_indexes.attrs['precip_win'] = precip_win
+    std_indexes.attrs['wlvl_win'] = wlvl_win
+
     return std_indexes, figures
 
 
-std_indexes, figures = calc_std_indexes(
-    staname='02360001',
-    dirname=osp.join(dirname, 'results_std_indexes')
-    )
-# calc_std_indexes(
-#     staname='05080001',
-#     dirname=osp.join(dirname, 'results_std_indexes')
-#     )
+# %%
+plt.ion()
 
-# # Setup legend.
-# ax.legend(
-#     bbox_to_anchor=[0, 1], loc='lower left', ncol=4,
-#     handletextpad=0.5, numpoints=1, fontsize=10, frameon=False,
-#     borderpad=0, labelspacing=0, borderaxespad=0.1)
+PRECIP_WIN = 3
+WLVL_WIN = 3
+
+DIRNAME = osp.join(
+    WORKDIR,
+    f'results_std_indexes_spi_{PRECIP_WIN}_spli_{WLVL_WIN}')
+
+figures_stack = []
+std_indexes_stack = []
+for staname in selected_stations:
+    std_indexes, figures = calc_std_indexes(
+        staname=staname,
+        dirname=DIRNAME,
+        precip_win=PRECIP_WIN,
+        wlvl_win=WLVL_WIN)
+    figures_stack.append(figures)
+    std_indexes_stack.append(std_indexes)
+    plt.close('all')
+
+
+FILENAMES = [
+    f'spi_vs_spli_{PRECIP_WIN}_spli_{WLVL_WIN}.pdf',
+    f'pdf_niveau_{PRECIP_WIN}_spli_{WLVL_WIN}.pdf',
+    f'pdf_precip_{PRECIP_WIN}_spli_{WLVL_WIN}.pdf',
+    f'correlation_croisee_{PRECIP_WIN}_spli_{WLVL_WIN}.pdf',
+    f'spli_vs_classes_{PRECIP_WIN}_spli_{WLVL_WIN}.pdf']
+for i, filename in enumerate(FILENAMES):
+    filepath = osp.join(DIRNAME, filename)
+    with PdfPages(filepath) as pdf:
+        for figures in figures_stack:
+            pdf.savefig(figures[i])
