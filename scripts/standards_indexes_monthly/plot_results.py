@@ -57,7 +57,8 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
         if above_isnull and below_isnull:
             orphan_idx.append(i)
     axs[0].plot(wlvl_daily.iloc[orphan_idx], color=COLORS['blue light'],
-                marker='.', ls='None', ms=2, zorder=1)
+                marker='.', ls='None', ms=2,
+                zorder=1)
     axs[0].set_ylabel("Niveau d'eau (m NMM)")
 
     # Plot water monthly means.
@@ -73,8 +74,14 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
 
     axs[0].plot(wlvl_mly.index,
                 wlvl_mly.values,
-                marker='None', color=COLORS['blue dark'], ls='-', zorder=100,
-                label="Niveaux moyens annuels")
+                marker='None', color=COLORS['blue dark'], ls='-',
+                zorder=100,
+                label="Niveaux moyens mensuels")
+
+    # Plot mean water level.
+    waterlvl_mean = np.nanmean(wlvl_daily.values)
+    axs[0].axhline(waterlvl_mean, ls='-', color='black', lw=1,
+                   zorder=10, label='Niveau moyen')
 
     # Plot yearly total precipitation.
     precip = precip_daily.copy()
