@@ -34,9 +34,12 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
     # of a big data gap.
     year_range = pd.Index(np.arange(
         wlvl_daily.index.year.min(), wlvl_daily.index.year.max() + 1))
-    isin = year_range.isin(wlvl_daily.index.year.unique())
-    for year in year_range[~isin]:
-        wlvl_daily.loc[datetime(year, 1, 1)] = np.nan
+    for year in year_range:
+        for month in range(1, 13):
+            mask = ((wlvl_daily.index.year == year) &
+                    (wlvl_daily.index.month == month))
+            if wlvl_daily[mask].isnull().all().values[0]:
+                wlvl_daily.loc[datetime(year, month, 1)] = np.nan
     wlvl_daily = wlvl_daily.sort_index()
 
     axs[0].plot(wlvl_daily, color=COLORS['blue light'], zorder=1, lw=1,
