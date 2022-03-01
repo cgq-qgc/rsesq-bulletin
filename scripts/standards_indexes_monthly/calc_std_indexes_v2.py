@@ -19,12 +19,10 @@ from scipy.stats import norm
 
 os.chdir(osp.dirname(__file__))
 from selected_stations import selected_stations
-from plot_results import plot_spli_overview, plot_spli_vs_classes
+from plot_results import (
+    plot_spli_overview, plot_spli_vs_classes, plot_pdf_niveau, plot_pdf_precip)
 matplotlib.rcParams['axes.unicode_minus'] = False
 plt.close('all')
-
-MONTH_NAMES = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
-               'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
 
 WORKDIR = osp.dirname(__file__)
 PRECIP_DAILY_ALL = pd.read_csv(
@@ -175,75 +173,7 @@ def calc_std_indexes(staname, dirname,
     return std_indexes, figures
 
 
-def plot_pdf_niveau(wlvl_norm: list, wlvl_pdf: list, wlvl_win: int,
-                    staname: str):
-    fig, axes = plt.subplots(4, 3, figsize=(11, 8.5))
 
-    for i, ax in enumerate(axes.flatten()):
-        dx = 0.01
-        xp = np.arange(0, 1000 + dx/2, dx)
-        loc, scale = wlvl_norm[i]
-        yp = norm.pdf(xp, loc, scale)
-        ax.plot(xp, yp, '-')
-
-        x = wlvl_pdf[i][0]
-        y = wlvl_pdf[i][1]
-        ax.plot(x, y, '.')
-
-        n, bins, patches = ax.hist(x, density=True, color='0.8')
-
-        ax.set_title(MONTH_NAMES[i])
-        if i % 3 == 0:
-            ax.set_ylabel('Densité')
-        if i > 8:
-            ax.set_xlabel('Niveau (m)')
-
-        axis_xmin = np.floor(np.min(x)) - 0.5
-        axis_xmax = np.ceil(np.max(x)) + 0.5
-        ax.axis(xmin=axis_xmin, xmax=axis_xmax)
-
-    suptitle = f"PDF Niveaux moyens ({wlvl_win} mois) - Station {staname}"
-    fig.suptitle(suptitle, fontsize=16)
-    fig.align_ylabels()
-    fig.subplots_adjust(
-        top=0.9, bottom=0.1, hspace=0.5, left=0.1, right=0.975)
-    return fig
-
-
-def plot_pdf_precip(precip_norm: list, precip_pdf: list, precip_win: int,
-                    staname: str):
-    fig, axes = plt.subplots(4, 3, figsize=(11, 8.5))
-
-    for i, ax in enumerate(axes.flatten()):
-        dx = 0.01
-        loc, scale = precip_norm[i]
-        xp = np.arange(0, 2000 + dx/2, dx)
-        yp = norm.pdf(xp, loc, scale)
-        ax.plot(xp, yp, '-')
-
-        x = precip_pdf[i][0]
-        y = precip_pdf[i][1]
-        ax.plot(x, y, '.')
-
-        n, bins, patches = ax.hist(x, density=True, color='0.8')
-
-        ax.set_title(MONTH_NAMES[i])
-        if i % 3 == 0:
-            ax.set_ylabel('Densité')
-        if i > 8:
-            ax.set_xlabel('Précipitation (mm)')
-
-        axis_xmin = np.floor(np.min(x)) - 50
-        axis_xmax = np.ceil(np.max(x)) + 50
-        ax.axis(xmin=axis_xmin, xmax=axis_xmax)
-
-    suptitle = f"PDF Précipitations ({precip_win} mois) - Station {staname}"
-    fig.suptitle(suptitle, fontsize=16)
-    fig.align_ylabels()
-    fig.subplots_adjust(
-        top=0.9, bottom=0.1, hspace=0.5, left=0.1, right=0.975)
-
-    return fig
 
 
 def plot_cross_corr(std_indexes, staname):

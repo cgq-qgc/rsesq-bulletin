@@ -10,61 +10,26 @@ import pandas as pd
 import matplotlib.pyplot as plt
 import numpy as np
 import matplotlib.dates as mdates
-from matplotlib.backends.backend_pdf import PdfPages
-import matplotlib as mpl
+from scipy.stats import norm
 
-from selected_stations import selected_stations
 
-# mpl.rcParams['figure.max_open_warning'] = len(selected_stations)
-
-# precip_yrly = pd.read_csv(
-#     'precip_yearly.csv', index_col=[0], parse_dates=[0])
-# precip_daily = pd.read_csv(
-#     'precip_daily.csv', index_col=[0], parse_dates=[0])
-# precip_normals = pd.read_csv(
-#     'precip_normals_1981-2010.csv', index_col=[0])
-
-# wl_daily_all = pd.read_csv(
-#     'waterlevels_daily.csv', index_col=[0], parse_dates=[0])
-# wl_daily_all['water_year'] = (
-#     wl_daily_all.index.year
-#     .where(wl_daily_all.index.month < 10, wl_daily_all.index.year + 1))
-
-# yearly_mean_wl = wl_daily_all.groupby('water_year').mean()
-# yearly_min_wl = wl_daily_all.groupby('water_year').min()
-# yearly_max_wl = wl_daily_all.groupby('water_year').max()
-
-# %%
-# plt.close('all')
-# plt.ioff()
-
-# Color definitions.
 COLORS = {
     'blue dark': '#0080FF',
     'blue light': '#CCCCFF',
-    'Precip': 'orange'
-    }
-gridcolor = '0.66'
-daily_wl_color = '#CCCCFF'
-monthly_wl_color = '#0080FF'
-max_wl_color = '#660000'
-min_wl_color = '#FF9999'
-mean_line_color = 'black'
-precip_color = '#0080FF'
-
-std_ind_max = 0
-std_ind_min = 0
+    'Precip': 'orange'}
+GRIDCOLOR = '0.66'
+MONTH_NAMES = ['Janvier', 'Février', 'Mars', 'Avril', 'Mai', 'Juin', 'Juillet',
+               'Août', 'Septembre', 'Octobre', 'Novembre', 'Décembre']
 
 
 def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
-    print("Plotting results for station {}...".format(staname))
     # Nous calculons les SPI et SPLI seulement pour les données récentes.
     # wlvl_mly = wlvl_mly[wlvl_mly.index >= 1981].copy()
     # wlvl_mly.unstack(level=0)
 
     fig, axs = plt.subplots(3, 1, figsize=(10, 7.5), sharex=True)
 
-    # We make sure there is at least one data entry for each year. This avoid
+    # We make sure there is at least one data entry for each month. This avoid
     # having long straigth lines between two data point that are on each side
     # of a big data gap.
     year_range = pd.Index(np.arange(
@@ -157,7 +122,7 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
     # axs[2].set_yticklabels(yticks)
     axs[2].axis(ymin=y_min, ymax=y_max)
     axs[2].grid(visible=True, which='major', axis='y',
-                linestyle='-', linewidth=0.5, color=gridcolor)
+                linestyle='-', linewidth=0.5, color=GRIDCOLOR)
 
     # Setup xaxis.
     mask = pd.notnull(std_indexes['SPLI_corr'].values)
@@ -194,10 +159,10 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
 
     # Setup grid.
     for ax in axs:
-        ax.grid(visible=True, which='major', axis='x', color=gridcolor,
+        ax.grid(visible=True, which='major', axis='x', color=GRIDCOLOR,
                 linestyle='-', linewidth=0.5)
         if base > 1:
-            ax.grid(visible=True, which='minor', axis='x', color=gridcolor,
+            ax.grid(visible=True, which='minor', axis='x', color=GRIDCOLOR,
                     linestyle='-', linewidth=0.5)
 
     # Setup legend.
@@ -276,5 +241,76 @@ def plot_spli_vs_classes(std_indexes, staname):
 
     fig.tight_layout(rect=[0, 0, 1, 0.95])
     fig.subplots_adjust(top=0.9)
+
+    return fig
+
+
+def plot_pdf_niveau(wlvl_norm: list, wlvl_pdf: list, wlvl_win: int,
+                    staname: str):
+    fig, axes = plt.subplots(4, 3, figsize=(11, 8.5))
+
+    for i, ax in enumerate(axes.flatten()):
+        dx = 0.01
+        xp = np.arange(0, 1000 + dx/2, dx)
+        loc, scale = wlvl_norm[i]
+        yp = norm.pdf(xp, loc, scale)
+        ax.plot(xp, yp, '-')
+
+        x = wlvl_pdf[i][0]
+        y = wlvl_pdf[i][1]
+        ax.plot(x, y, '.')
+
+        n, bins, patches = ax.hist(x, density=True, color='0.8')
+
+        ax.set_title(MONTH_NAMES[i])
+        if i % 3 == 0:
+            ax.set_ylabel('Densité')
+        if i > 8:
+            ax.set_xlabel('Niveau (m)')
+
+        axis_xmin = np.floor(np.min(x)) - 0.5
+        axis_xmax = np.ceil(np.max(x)) + 0.5
+        ax.axis(xmin=axis_xmin, xmax=axis_xmax)
+
+    suptitle = f"PDF Niveaux moyens ({wlvl_win} mois) - Station {staname}"
+    fig.suptitle(suptitle, fontsize=16)
+    fig.align_ylabels()
+    fig.subplots_adjust(
+        top=0.9, bottom=0.1, hspace=0.5, left=0.1, right=0.975)
+    return fig
+
+
+def plot_pdf_precip(precip_norm: list, precip_pdf: list, precip_win: int,
+                    staname: str):
+    fig, axes = plt.subplots(4, 3, figsize=(11, 8.5))
+
+    for i, ax in enumerate(axes.flatten()):
+        dx = 0.01
+        loc, scale = precip_norm[i]
+        xp = np.arange(0, 2000 + dx/2, dx)
+        yp = norm.pdf(xp, loc, scale)
+        ax.plot(xp, yp, '-')
+
+        x = precip_pdf[i][0]
+        y = precip_pdf[i][1]
+        ax.plot(x, y, '.')
+
+        n, bins, patches = ax.hist(x, density=True, color='0.8')
+
+        ax.set_title(MONTH_NAMES[i])
+        if i % 3 == 0:
+            ax.set_ylabel('Densité')
+        if i > 8:
+            ax.set_xlabel('Précipitation (mm)')
+
+        axis_xmin = np.floor(np.min(x)) - 50
+        axis_xmax = np.ceil(np.max(x)) + 50
+        ax.axis(xmin=axis_xmin, xmax=axis_xmax)
+
+    suptitle = f"PDF Précipitations ({precip_win} mois) - Station {staname}"
+    fig.suptitle(suptitle, fontsize=16)
+    fig.align_ylabels()
+    fig.subplots_adjust(
+        top=0.9, bottom=0.1, hspace=0.5, left=0.1, right=0.975)
 
     return fig
