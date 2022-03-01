@@ -274,7 +274,8 @@ def plot_pdf_niveau(wlvl_norm: list, wlvl_pdf: list, wlvl_win: int,
     return fig
 
 
-def plot_pdf_precip(precip_norm: list, precip_pdf: list, precip_win: int):
+def plot_pdf_precip(precip_norm: list, precip_pdf: list, precip_win: int,
+                    staname: str):
     fig, axes = plt.subplots(4, 3, figsize=(11, 8.5))
 
     for i, ax in enumerate(axes.flatten()):
@@ -300,7 +301,7 @@ def plot_pdf_precip(precip_norm: list, precip_pdf: list, precip_win: int):
         axis_xmax = np.ceil(np.max(x)) + 50
         ax.axis(xmin=axis_xmin, xmax=axis_xmax)
 
-    suptitle = "PDF Précipitations ({} mois)".format(precip_win)
+    suptitle = f"PDF Précipitations ({precip_win} mois) - Station {staname}"
     fig.suptitle(suptitle, fontsize=16)
     fig.align_ylabels()
     fig.subplots_adjust(
