@@ -26,7 +26,6 @@ from matplotlib.backends.backend_pdf import PdfPages
 matplotlib.rcParams['axes.unicode_minus'] = False
 plt.close('all')
 
-WORKDIR = osp.dirname(__file__)
 PRECIP_DAILY_ALL = pd.read_csv(
     'precip_daily_2022-02-28.csv',
     index_col=[0], parse_dates=[0])
@@ -82,6 +81,8 @@ def calc_std_indexes(staname, precip_win: int = 12, wlvl_win: int = 3):
             [('SPLI_corr', i) for i in range(1, 13)],
             names=['std index', 'month'])
         )
+    std_indexes.attrs['precip_win'] = precip_win
+    std_indexes.attrs['wlvl_win'] = wlvl_win
 
     precip_norm = []
     precip_pdf = []
