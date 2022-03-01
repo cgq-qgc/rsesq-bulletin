@@ -176,7 +176,8 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
     return fig
 
 
-def plot_spli_vs_classes(std_indexes, staname):
+def plot_spli_vs_classes(std_indexes):
+    staname = std_indexes.attrs['staname']
     fig, ax = plt.subplots(figsize=(10, 5))
 
     colors = {
@@ -318,7 +319,8 @@ def plot_pdf_precip(precip_norm: list, precip_pdf: list, precip_win: int,
     return fig
 
 
-def plot_cross_corr(std_indexes, staname):
+def plot_cross_corr(std_indexes):
+    staname = std_indexes.attrs['staname']
     x = std_indexes['SPLI_corr'].values.astype(float)
     y = std_indexes['SPI_ref'].values.astype(float)
     shifts = np.arange(-24, 25)

@@ -83,6 +83,7 @@ def calc_std_indexes(staname, precip_win: int = 12, wlvl_win: int = 3):
         )
     std_indexes.attrs['precip_win'] = precip_win
     std_indexes.attrs['wlvl_win'] = wlvl_win
+    std_indexes.attrs['staname'] = staname
 
     precip_norm = []
     precip_pdf = []
@@ -136,7 +137,7 @@ def calc_std_indexes(staname, precip_win: int = 12, wlvl_win: int = 3):
     # =========================================================================
     # Sauvegarde des calculs
     # =========================================================================
-    print("Saving results for station {}...".format(staname))
+    print("Formatting results for station {}...".format(staname))
 
     std_indexes = std_indexes.stack(level=1, dropna=False)
     std_indexes['day'] = 1
@@ -155,8 +156,8 @@ def calc_std_indexes(staname, precip_win: int = 12, wlvl_win: int = 3):
 
     fig2 = plot_pdf_niveau(wlvl_norm, wlvl_pdf, wlvl_win, staname)
     fig3 = plot_pdf_precip(precip_norm, precip_pdf, precip_win, staname)
-    fig4 = plot_cross_corr(std_indexes, staname)
-    fig5 = plot_spli_vs_classes(std_indexes, staname)
+    fig4 = plot_cross_corr(std_indexes)
+    fig5 = plot_spli_vs_classes(std_indexes)
 
     figures = (fig, fig2, fig3, fig4, fig5)
 
@@ -166,8 +167,8 @@ def calc_std_indexes(staname, precip_win: int = 12, wlvl_win: int = 3):
 # %%
 plt.ioff()
 
-WLVL_WIN = 6
-PRECIP_WIN = 6
+WLVL_WIN = 12
+PRECIP_WIN = 12
 
 figures_stack = []
 std_indexes_stack = []
