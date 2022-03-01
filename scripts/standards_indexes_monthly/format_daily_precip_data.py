@@ -5,6 +5,7 @@ A script to prepare precipitation data for SPI and SPLI calculations.
 from datetime import datetime
 import os.path as osp
 import pandas as pd
+import numpy as np
 
 from selected_stations import selected_stations
 
@@ -29,10 +30,13 @@ grid_indexes = connect_table.loc[selected_stations].grid_idx.astype(str).values
 site_precip = precip.loc[:, grid_indexes]
 site_precip.columns = selected_stations
 
-# Remove missing values at the end of the series.
-# site_precip = (
-#     site_precip[(site_precip.index >= datetime(1960, 10, 1)) &
-#                 (site_precip.index <= datetime(2021, 9, 30))]
-#     ).copy()
+# Some precip values are way to large on 23-12-2020 and need to be
+# corrected.
+date = datetime(2020, 12, 23)
+mask = (site_precip.loc[date] > 100)
+if np.sum(mask.values) == 0:
+    raise ValueError("It appears the error was corrected. "
+                     "This might not be necessary anymore")
+site_precip.loc[date, mask] = site_precip.loc[date, mask] / 1000
 
 site_precip.to_csv(osp.join(outdir, "precip_daily_2022-02-28.csv"))
