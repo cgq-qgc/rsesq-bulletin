@@ -153,10 +153,7 @@ def calc_std_indexes(staname, dirname,
     # =========================================================================
     # Plot results
     # =========================================================================
-    # fig = plot_spi_vs_spli(std_indexes, staname, precip_win, wlvl_win)
-    # fig.savefig(osp.join(outdir, 'spi_vs_spli.pdf'))
     print("Plotting results for station {}...".format(staname))
-
     fig = plot_spli_overview(
         staname, sta_wl_daily, sta_precip_daily, std_indexes)
     fig.savefig(osp.join(outdir, 'spi_vs_spli.pdf'))
@@ -175,71 +172,6 @@ def calc_std_indexes(staname, dirname,
 
     figures = (fig, fig2, fig3, fig4, fig5)
     return std_indexes, figures
-
-
-def plot_spi_vs_spli(std_indexes: pd.DataFrame, staname: str,
-                     precip_win: int, wlvl_win: int):
-    gridcolor = '0.66'
-    spi_color = 'orange'
-    spli_color = '#0080FF'
-
-    fig, ax = plt.subplots(figsize=(10, 5))
-    ax.plot(std_indexes['SPI_ref'],
-            label='SPI_{} (1981-2010)'.format(precip_win),
-            color=spi_color)
-    ax.plot(std_indexes['SPLI_corr'],
-            label='SPLI_{} corrigés'.format(wlvl_win),
-            color=spli_color)
-
-    y_min = min(std_indexes['SPI_ref'].min(), std_indexes['SPLI_corr'].min())
-    y_max = max(std_indexes['SPI_ref'].max(), std_indexes['SPLI_corr'].max())
-    y_min -= (y_max - y_min) * 0.1
-    y_max += (y_max - y_min) * 0.1
-
-    # Setup xaxis.
-    year_min = 1995
-    year_max = 2022
-    delta_year = year_max - year_min
-
-    if delta_year <= 15:
-        base = 1
-    elif delta_year <= 30:
-        base = 2
-    else:
-        base = 5
-
-    xmin = datetime(year_min, 1, 1)
-    xmax = datetime(year_max, 1, 1)
-    ax.axis(xmin=xmin, xmax=xmax, ymin=y_min, ymax=y_max)
-
-    ax.xaxis.set_major_locator(mdates.YearLocator(
-        base=base, month=1, day=1))
-    ax.xaxis.set_major_formatter(
-        mdates.DateFormatter('%Y-%m-%d'))
-
-    # Setup minor x-ticks.
-    if base > 1:
-        ax.xaxis.set_minor_locator(mdates.YearLocator(
-            base=1, month=1, day=1))
-        ax.tick_params(axis='x', which='minor', bottom=True)
-
-    # Setup grid.
-    ax.grid(visible=True, which='major', axis='y', color=gridcolor,
-            linestyle='-', linewidth=0.5)
-    # if base > 1:
-    #     ax.grid(visible=True, which='minor', axis='x', color=gridcolor,
-    #             linestyle='-', linewidth=0.5)
-
-    fig.autofmt_xdate()
-    fig.suptitle("Station {}".format(staname), fontsize=16)
-
-    # Setup legend.
-    ax.legend(
-        bbox_to_anchor=[0, 1], loc='lower left', ncol=4,
-        handletextpad=0.5, numpoints=1, fontsize=10, frameon=False,
-        borderpad=0, labelspacing=0, borderaxespad=0.1)
-
-    return fig
 
 
 def plot_pdf_niveau(wlvl_norm: list, wlvl_pdf: list, wlvl_win: int,
