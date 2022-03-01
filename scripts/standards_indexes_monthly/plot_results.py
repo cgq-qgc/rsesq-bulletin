@@ -85,14 +85,17 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
     precip['day'] = 15
     precip.index = pd.to_datetime(precip[['year', 'month', 'day']])
 
-    axs[1].bar(precip.index, precip['precip'].values,
-               width=150, zorder=10, color=COLORS['blue light'],
-               )
     axs[1].plot(precip.index, precip['precip'].values,
                 marker='o', color=COLORS['blue dark'], ls='--', zorder=100,
                 label='Précipitations annuelles')
     axs[1].set_ylabel("Précipitations (mm)")
-    axs[1].axis(ymin=500)
+
+    # Plot total precip yearly normal.
+    mask = (precip.index.year >= 1981) & (precip.index.year <= 2010)
+    precip_yearly_normal = precip.loc[mask, 'precip'].mean()
+    axs[1].axhline(precip_yearly_normal, ls='-', color='black',
+                   lw=1, zorder=1,
+                   label='Précipitations annuelles normales (1981-2010)')
 
     # Plot SPI and SPLI results.
     spi = std_indexes['SPI_ref']
