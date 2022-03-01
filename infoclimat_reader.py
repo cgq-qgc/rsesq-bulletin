@@ -136,8 +136,7 @@ class InfoClimatGridReader(object):
     dirpath_netcdf : str | Path
         The path of the directory where the grid netcdf files are stored.
     """
-    VARNAMES = ['PREC', 'NEIGE', 'NESOL', 'PLUIE', 'PREC',
-                'TMAX', 'TMIN', 'TMOY']
+    VARNAMES = ['PLUIE', 'NEIGE', 'PREC', 'NESOL', 'TMIN', 'TMOY', 'TMAX']
 
     def __init__(self, dirpath_netcdf: str | Path):
         super().__init__()
