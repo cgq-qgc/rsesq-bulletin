@@ -312,3 +312,35 @@ def plot_pdf_precip(precip_norm: list, precip_pdf: list, precip_win: int,
         top=0.9, bottom=0.1, hspace=0.5, left=0.1, right=0.975)
 
     return fig
+
+
+def plot_cross_corr(std_indexes, staname):
+    x = std_indexes['SPLI_corr'].values.astype(float)
+    y = std_indexes['SPI_ref'].values.astype(float)
+    shifts = np.arange(-24, 25)
+    corrcoeffs = []
+    for shift in shifts:
+        if shift < 0:
+            ys = np.hstack([y[-shift:], [np.nan] * -shift])
+        elif shift > 0:
+            ys = np.hstack([[np.nan] * shift, y[:-shift]])
+        mask = (~np.isnan(x)) & (~np.isnan(ys))
+        corrcoeffs.append(np.corrcoef(x[mask], ys[mask])[0, 1])
+
+    fig, ax = plt.subplots(figsize=(6, 4))
+
+    ax.plot(shifts, corrcoeffs, marker='.', zorder=100)
+    ax.axvline(shifts[np.argmax(corrcoeffs)], color='red', zorder=10)
+
+    ax.set_ylabel('Corrélation', labelpad=15, fontsize=14)
+    ax.set_xlabel('Décalage SPLI p/r SPI (mois)', labelpad=10, fontsize=14)
+    ax.set_xticks(shifts[::4])
+    ax.set_xticks(shifts, minor=True)
+    ax.axis(xmin=-24, xmax=24)
+
+    fig.suptitle(f"Station {staname}", fontsize=16)
+
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.subplots_adjust(top=0.85)
+
+    return fig
