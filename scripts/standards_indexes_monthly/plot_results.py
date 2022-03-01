@@ -119,21 +119,6 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
                 label='SPI_12mois (1981-2010)')
 
     axs[2].set_ylabel("Écart normalisé")
-
-    mask = pd.notnull(std_indexes['SPLI_corr'].values)
-    y_min = min(
-        std_indexes[mask]['SPLI_corr'].dropna().min(),
-        std_indexes[mask]['SPI_ref'].dropna().min())
-    y_max = max(
-        std_indexes[mask]['SPLI_corr'].dropna().max(),
-        std_indexes[mask]['SPI_ref'].dropna().max())
-    y_min += -0.05 * (y_max - y_min)
-    y_max += 0.05 * (y_max - y_min)
-
-    # yticks = [-ylim, -1.28, -0.84, -0.25, 0.25, 0.84, 1.28, ylim]
-    # axs[2].set_yticks(yticks)
-    # axs[2].set_yticklabels(yticks)
-    axs[2].axis(ymin=y_min, ymax=y_max)
     axs[2].grid(visible=True, which='major', axis='y',
                 linestyle='-', linewidth=0.5, color=GRIDCOLOR)
 
