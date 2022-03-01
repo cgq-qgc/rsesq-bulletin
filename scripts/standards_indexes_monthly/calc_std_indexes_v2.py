@@ -278,10 +278,6 @@ def plot_cross_corr(std_indexes, staname):
 
 
 def plot_spli_vs_classes(std_indexes, staname):
-    gridcolor = '0.66'
-    spi_color = 'orange'
-    spli_color = '#0080FF'
-
     fig, ax = plt.subplots(figsize=(10, 5))
 
     colors = {
@@ -294,18 +290,15 @@ def plot_spli_vs_classes(std_indexes, staname):
         'tres_haut': '#286273'
         }
 
-    marker = 'o'
-    marker_size = 8
+    ax.axhspan(-10, -1.28, color=colors['tres_bas'])
+    ax.axhspan(-1.28, -0.84, color=colors['bas'])
+    ax.axhspan(-0.84, -0.25, color=colors['mod_bas'])
+    ax.axhspan(-0.25, 0.25, color=colors['proche_moy'])
+    ax.axhspan(0.25, 0.84, color=colors['mod_haut'])
+    ax.axhspan(0.84, 1.28, color=colors['haut'])
+    ax.axhspan(1.28, 10, color=colors['tres_haut'])
 
-    ax.axhspan(-5, -1.28, color="#db442c")
-    ax.axhspan(-1.28, -0.84, color="#f18e00")
-    ax.axhspan(-0.84, -0.25, color="#ffdd57")
-    ax.axhspan(-0.25, 0.25, color="#6dc55a")
-    ax.axhspan(0.25, 0.84, color="#32a9dd")
-    ax.axhspan(0.84, 1.28, color="#1b75bb")
-    ax.axhspan(1.28, 5, color="#286273")
-
-    ax.plot(std_indexes['SPLI_corr'].dropna(), color='black')
+    ax.plot(std_indexes['SPLI_corr'], color='black')
 
     y_min = std_indexes['SPLI_corr'].dropna().min()
     y_max = std_indexes['SPLI_corr'].dropna().max()
