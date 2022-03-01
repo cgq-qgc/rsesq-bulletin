@@ -299,7 +299,7 @@ def plot_spli_vs_classes(std_indexes, staname):
 
     ax.plot(std_indexes['SPLI_corr'], color='black')
 
-    y_min = std_indexes['SPLI_corr'].dropna().min()
+    y_min = min(std_indexes['SPLI_corr'].dropna().min(), 2010)
     y_max = std_indexes['SPLI_corr'].dropna().max()
     y_min -= (y_max - y_min) * 0.05
     y_max += (y_max - y_min) * 0.05
@@ -339,6 +339,10 @@ def plot_spli_vs_classes(std_indexes, staname):
 
     fig.autofmt_xdate()
     fig.suptitle("Station {}".format(staname), fontsize=16)
+
+    fig.tight_layout(rect=[0, 0, 1, 0.95])
+    fig.subplots_adjust(top=0.9)
+
     return fig
 
 
