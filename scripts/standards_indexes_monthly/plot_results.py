@@ -156,7 +156,7 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
     fig.suptitle("Station {}".format(staname), fontsize=16)
     fig.align_ylabels()
     fig.subplots_adjust(
-        top=0.9, bottom=0.1, hspace=0.25, left=0.1, right=0.975)
+        top=0.875, bottom=0.075, hspace=0.25, left=0.1, right=0.975)
 
     # Setup grid.
     for ax in axs:
@@ -171,7 +171,7 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
         ax.legend(
             bbox_to_anchor=[0, 1], loc='lower left', ncol=4,
             handletextpad=0.5, numpoints=1, fontsize=10, frameon=False,
-            borderpad=0, labelspacing=0, borderaxespad=0.1)
+            borderpad=0, labelspacing=0.3, borderaxespad=0.1)
 
     return fig
 
