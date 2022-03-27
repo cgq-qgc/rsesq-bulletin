@@ -12,7 +12,6 @@ import numpy as np
 import matplotlib.dates as mdates
 from scipy.stats import norm
 
-
 COLORS = {
     'blue dark': '#0080FF',
     'blue light': '#CCCCFF',
@@ -79,7 +78,23 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
                 wlvl_mly.values,
                 marker='None', color=COLORS['blue dark'], ls='-',
                 zorder=100,
-                label="Niveaux moyens mensuels")
+                label="Niveaux mensuels moyens")
+
+    # Plot water level yearly mean
+    wl_mean = wlvl_daily.copy()
+    wl_mean['year'] = wl_mean.index.year
+    wl_mean = wl_mean.groupby(['year']).mean()
+    wl_mean = wl_mean.reset_index()
+    wl_mean['month'] = 6
+    wl_mean['day'] = 15
+    wl_mean.index = pd.to_datetime(wl_mean[['year', 'month', 'day']])
+
+    axs[0].plot(wl_mean['water_level'],
+                marker='None', ms=3, color='red',
+                ls='--', lw=1, zorder=120,
+                label='Niveaux annuels moyens')
+    axs[0].plot(wl_mean['water_level'], marker='o', ms=3,
+                color='red', ls='None', zorder=120)
 
     # Plot mean water level.
     waterlvl_mean = np.nanmean(wlvl_daily.values)
