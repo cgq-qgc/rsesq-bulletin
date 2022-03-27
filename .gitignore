@@ -1,3 +1,5 @@
+*.gwt
+*.gwt.bak
 */img_cartes_localisation_puits/*
 */img_fonction_reponse_baro/*
 */img_hydrogrammes/*
