@@ -11,7 +11,6 @@ import os
 import os.path as osp
 import pandas as pd
 import numpy as np
-from datetime import datetime
 import matplotlib
 import matplotlib.pyplot as plt
 from scipy.stats import norm
@@ -24,10 +23,10 @@ from plot_results import (
 from matplotlib.backends.backend_pdf import PdfPages
 
 matplotlib.rcParams['axes.unicode_minus'] = False
-plt.close('all')
+# plt.close('all')
 
 PRECIP_DAILY_ALL = pd.read_csv(
-    'precip_daily_2022-02-28.csv',
+    'precip_daily_2022-03-25.csv',
     index_col=[0], parse_dates=[0])
 
 WLVL_DAILY_ALL = pd.read_csv(
@@ -90,8 +89,6 @@ def calc_std_indexes(staname, precip_win: int = 12, wlvl_win: int = 3):
     wlvl_norm = []
     wlvl_pdf = []
     for m in range(1, 13):
-        print("Processing month {}".format(m))
-
         wlvl_m = wlvl[('water_level', m)].dropna()
         precip_m = precip[('precip', m)].dropna()
 
@@ -115,8 +112,8 @@ def calc_std_indexes(staname, precip_win: int = 12, wlvl_win: int = 3):
         std_indexes.loc[precip_m.index, ('SPI', m)] = spi
 
         # Calcul des paramètres d'un modèle de régression linéaire qui
-        # permettra de corriger les SPLI.
-        p = np.polyfit(spi_ref, spi, deg=1)
+        # permettra de corriger les SPLI où SPLI_ref = a * SPI + b.
+        p = np.polyfit(spi, spi_ref, deg=1)
 
         # Calcul des SPLI.
         # https://jakevdp.github.io/PythonDataScienceHandbook/05.13-kernel-density-estimation.html
@@ -130,7 +127,8 @@ def calc_std_indexes(staname, precip_win: int = 12, wlvl_win: int = 3):
         spli = (x - loc) / scale
         std_indexes.loc[wlvl_m.index, ('SPLI', m)] = spli
 
-        # Correction des valeurs de SPLI pour la période de référence.
+        # Correction des valeurs de SPLI pour la période de référence où
+        # SPLI_corr = a * SPLI + b
         spli_corr = p[0] * spli + p[1]
         std_indexes.loc[wlvl_m.index, ('SPLI_corr', m)] = spli_corr
 
@@ -167,29 +165,44 @@ def calc_std_indexes(staname, precip_win: int = 12, wlvl_win: int = 3):
 # %%
 plt.ioff()
 
-WLVL_WIN = 12
-PRECIP_WIN = 12
+wlvl_win = 6
+precip_win = 6
 
 figures_stack = []
 std_indexes_stack = []
-for staname in selected_stations:
+# for staname in selected_stations:
+for staname in ['03040018']:
     std_indexes, figures = calc_std_indexes(
         staname=staname,
-        precip_win=PRECIP_WIN,
-        wlvl_win=WLVL_WIN)
+        precip_win=precip_win,
+        wlvl_win=wlvl_win)
     figures_stack.append(figures)
     std_indexes_stack.append(std_indexes)
-    plt.close('all')
 
 DIRNAME = osp.join(osp.dirname(__file__), 'results_std_indexes')
+os.makedirs(DIRNAME, exist_ok=True)
+
 FILENAMES = [
-    f'(spi{PRECIP_WIN}_spli{WLVL_WIN}) spi_vs_spli.pdf',
-    f'(spi{PRECIP_WIN}_spli{WLVL_WIN}) pdf_niveau.pdf',
-    f'(spi{PRECIP_WIN}_spli{WLVL_WIN}) pdf_precip.pdf',
-    f'(spi{PRECIP_WIN}_spli{WLVL_WIN}) correlation_croisee.pdf',
-    f'(spi{PRECIP_WIN}_spli{WLVL_WIN}) spli_vs_classes.pdf']
+    f'(spli{wlvl_win}_spi{precip_win}) spi_vs_spli.pdf',
+    f'(spli{wlvl_win}_spi{precip_win}) pdf_niveau.pdf',
+    f'(spli{wlvl_win}_spi{precip_win}) pdf_precip.pdf',
+    f'(spli{wlvl_win}_spi{precip_win}) correlation_croisee.pdf',
+    f'(spli{wlvl_win}_spi{precip_win}) spli_vs_classes.pdf']
 for i, filename in enumerate(FILENAMES):
     filepath = osp.join(DIRNAME, filename)
     with PdfPages(filepath) as pdf:
         for figures in figures_stack:
             pdf.savefig(figures[i])
+
+import pandas.io.formats.excel
+pandas.io.formats.excel.ExcelFormatter.header_style = None
+excel_filename = osp.join(
+    DIRNAME, f'spli{wlvl_win}_spi{precip_win} results.xlsx')
+with pd.ExcelWriter(excel_filename,
+                    datetime_format="YYYY-MM-DD") as writer:
+    for staname, std_indexes in zip(selected_stations, std_indexes_stack):
+        std_indexes.to_excel(
+            writer, sheet_name=str(staname), float_format="%.3f")
+        worksheet = writer.sheets[staname]
+        for idx in range(5):
+            worksheet.set_column(idx, idx, 12)
