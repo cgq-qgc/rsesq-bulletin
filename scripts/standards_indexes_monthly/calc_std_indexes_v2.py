@@ -1,11 +1,11 @@
 # -*- coding: utf-8 -*-
 """
-A script to calculate SPI and SPLI at selected piezometric stations
-of the RSESQ.
+Un script pour calculer les SPI et SPLI pour les stations piézométriques
+sélectionnées du RSESQ.
 
 Contrairement à la version 1, ce script utilise une loi normale directement
-pour le calcul des SPI et SPLI, au lieu d'utiliser un loi Gamma pour les
-précipitations et d'un estimateur à noyau pour les niveaux d'eau.
+pour le calcul des SPI et SPLI au lieu d'utiliser un loi Gamma pour les
+précipitations et un estimateur à noyau pour les niveaux d'eau.
 """
 import os
 import os.path as osp
@@ -23,7 +23,7 @@ from plot_results import (
 from matplotlib.backends.backend_pdf import PdfPages
 
 matplotlib.rcParams['axes.unicode_minus'] = False
-# plt.close('all')
+plt.close('all')
 
 PRECIP_DAILY_ALL = pd.read_csv(
     'precip_daily_2022-03-25.csv',
