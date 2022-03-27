@@ -424,7 +424,7 @@ class DataSheetCreator(object):
             ).replace('\\', '/')
         if not osp.exists(pathlocal):
             pathlocal = osp.join(
-                self.workdir, "contexte_puits_non_disponible.pdf"
+                self.workdir, 'latex', "contexte_puits_non_disponible.pdf"
                 ).replace('\\', '/')
 
         pathhgraph = ''
@@ -456,7 +456,7 @@ class DataSheetCreator(object):
             ).replace('\\', '/')
         if not osp.exists(pathphoto):
             pathphoto = osp.join(
-                self.workdir, "photo_non_disponible.pdf"
+                self.workdir, 'latex', "photo_non_disponible.pdf"
                 ).replace('\\', '/')
 
         pathbrf = osp.join(
@@ -524,7 +524,7 @@ class DataSheetCreator(object):
             r"\newcommand{\inputpagesix}{}")
         content.append("")
 
-        filename = osp.join(self.workdir, 'fiches-rsesq-station.tex')
+        filename = osp.join(self.workdir, 'latex', 'fiches-rsesq-station.tex')
         with open(filename, 'w', encoding='utf8') as textfile:
             textfile.write('\n'.join(content))
 
