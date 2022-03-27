@@ -217,7 +217,7 @@ def plot_spli_vs_classes(std_indexes):
     else:
         base = 5
 
-    xmin = datetime(year_min, 1, 1)
+    xmin = datetime(min(year_min, 2010), 1, 1)
     xmax = datetime(year_max, 1, 1)
     ax.axis(xmin=xmin, xmax=xmax, ymin=y_min, ymax=y_max)
 
