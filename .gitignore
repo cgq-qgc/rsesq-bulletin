@@ -14,10 +14,14 @@ trash/*
 */standards_indexes_yearly/results_std_indexes*/*
 */master_recession_curve/Météo/*
 */master_recession_curve/Niveaux/*
+
 fiches-rsesq.pdf
 precip_daily_*.csv
 waterlevels_daily_*.csv
 RP-64147-FR(1).pdf
+SDA_ 2018-05-25.gdb.zip
+Structure_physique_SDA.pdf
+Logs_complet_06-2021.xlsx
 
 # LaTex
 *.bbl
