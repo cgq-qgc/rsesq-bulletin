@@ -1,27 +1,28 @@
 # -*- coding: utf-8 -*-
 """
-Created on Fri Oct 22 14:47:16 2021
-@author: User
+Outil permettant de générer.
 """
-# Note: There is currently no binary wheel for Fiona and Rasterio that are
-# available on Pypi. So if using a pip installed version of Python, you need
-# to install, in the right order, the following packages using wheels from
-# Christopher Gohlke’s website.
+# Note importante:
+
+# Il n'y a présentement pas de "wheel" pour Fiona et Rasterio sur
+# PyPi. Si vous utiliser pip pour installer vos modules Python, il faudra
+# installer, dans le bon ordre, les modules suivant en utilisant les
+# "wheels" qui sont distribués sur le site de Christopher Gohlke.
 
 # (1) https://www.lfd.uci.edu/~gohlke/pythonlibs/#gdal
 # (2) https://www.lfd.uci.edu/~gohlke/pythonlibs/#fiona
 # (3) https://www.lfd.uci.edu/~gohlke/pythonlibs/#shapely
 # (4) https://www.lfd.uci.edu/~gohlke/pythonlibs/#rasterio
 
-# You will also need a numpy version >= 1.20.0 for contextily to work properly.
-# Numpy can be installed directly from PyPi. There is no need to use a wheel
-# from Christopher Gohlke’s website.
-
+# Vous aurez également besoin d'une version de numpy plus grande ou
+# égale à 1.20.0 pour que le module "contextily" marche correctement.
+# Numpy peut être installé directement de PyPi. Il n'est as nécessaire
+# d'utiliser une "wheel" de Christopher Gohlke.
 
 # https://www.donneesquebec.ca/recherche/dataset/decoupages-administratifs
+
 import os
 import os.path as osp
-import fiona
 import geopandas as gpd
 from shapely.geometry import Point
 import subprocess
@@ -567,8 +568,3 @@ if __name__ == '__main__':
             continue
         station_names.append(station_name)
         dscreator.build_datasheet_for_station(station_name)
-
-    # datasheet = dscreator.build_datasheet_for_station('02000006')
-    # datasheet = dscreator.build_datasheet_for_station('03030008')
-    # datasheet = dscreator.build_datasheet_for_station('02G47001')
-    # datasheet = dscreator.datasheet('02507001')
