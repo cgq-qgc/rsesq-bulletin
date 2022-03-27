@@ -210,8 +210,10 @@ class StationDataSheet(object):
 
 class DataSheetCreator(object):
 
-    def __init__(self, workdir, db_filename, logs_filename, sda_filename):
+    def __init__(self, workdir, outdir, db_filename, logs_filename,
+                 sda_filename):
         self.workdir = workdir
+        self.outdir = outdir
         self.db_filename = db_filename
         self.logs_filename = logs_filename
         self.sda_filename = sda_filename
@@ -539,11 +541,8 @@ class DataSheetCreator(object):
             'xelatex.exe -synctex=1 -interaction=nonstopmode "fiches-rsesq.tex"',
             cwd=osp.join(self.workdir, 'latex'))
 
-        src = osp.join(
-            self.workdir, 'latex', "fiches-rsesq.pdf")
-        dst = osp.join(
-            self.workdir, 'pdf_fiches_stations',
-            "fiche_{}.pdf".format(station_name))
+        src = osp.join(self.workdir, 'latex', "fiches-rsesq.pdf")
+        dst = osp.join(self.outdir, "fiche_{}.pdf".format(station_name))
         if not osp.exists(osp.dirname(dst)):
             os.makedirs(osp.dirname(dst))
         shutil.copyfile(src, dst)
@@ -555,6 +554,7 @@ class DataSheetCreator(object):
 if __name__ == '__main__':
     dscreator = DataSheetCreator(
         workdir=osp.dirname(__file__),
+        outdir=osp.join(osp.dirname(__file__), 'pdf_fiches_stations'),
         db_filename="rsesq_prod_2022-02-22.db",
         logs_filename="Logs_complet_06-2021.xlsx",
         sda_filename="SDA_ 2018-05-25.gdb.zip")
