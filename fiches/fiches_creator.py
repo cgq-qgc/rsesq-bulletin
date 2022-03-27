@@ -210,9 +210,9 @@ class StationDataSheet(object):
 
 class DataSheetCreator(object):
 
-    def __init__(self):
+    def __init__(self, workdir):
         super().__init__()
-        self.workdir = "C:/Users/User/rsesq-bulletin"
+        self.workdir = workdir
 
         self._dirphoto = osp.join(
             self.workdir, 'fiches', "img_photos_puits")
@@ -556,7 +556,7 @@ class DataSheetCreator(object):
 
 
 if __name__ == '__main__':
-    dscreator = DataSheetCreator()
+    dscreator = DataSheetCreator(workdir=osp.dirname(__file__))
 
     station_names = []
     for index, data in dscreator.stations.iterrows():
