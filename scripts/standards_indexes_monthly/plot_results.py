@@ -129,12 +129,12 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
     precip_win = std_indexes.attrs['precip_win']
     wlvl_win = std_indexes.attrs['wlvl_win']
 
-    axs[2].plot(spli_corr.index, spli_corr.values,
-                marker='None', ls='-', color=COLORS['blue dark'],
-                label=f'SPLI_{wlvl_win}mois corrigés')
     axs[2].plot(spi.index, spi.values,
                 marker='None', color=COLORS['Precip'], zorder=5,
                 label=f'SPI_{precip_win}mois (1981-2010)')
+    axs[2].plot(spli_corr.index, spli_corr.values, zorder=10,
+                marker='None', ls='--', color=COLORS['blue dark'],
+                label=f'SPLI_{wlvl_win}mois corrigés')
 
     axs[2].set_ylabel("Écart normalisé")
     axs[2].grid(visible=True, which='major', axis='y',
