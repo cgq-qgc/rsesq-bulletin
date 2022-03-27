@@ -10,6 +10,8 @@
 trash/*
 */standards_indexes_monthly/results_std_indexes*/*
 */standards_indexes_yearly/results_std_indexes*/*
+*/master_recession_curve/Météo/*
+*/master_recession_curve/Niveaux/*
 fiches-rsesq.pdf
 
 # LaTex
