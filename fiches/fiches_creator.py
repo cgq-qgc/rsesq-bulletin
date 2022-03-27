@@ -562,12 +562,14 @@ if __name__ == '__main__':
     station_names = []
     for index, data in dscreator.stations.iterrows():
         station_name = data['obs_well_id']
+
+        # Créer les fiches seulements pour les puits pour lesquels
+        # les cartes de localisation existent (sud du Québec).
         context_filepath = osp.join(
             dscreator._dirlocal,
-            'Cartes_Puits_RSESQ_{}.pdf'.format(station_name))
+            f'Cartes_Puits_RSESQ_{station_name}.pdf')
         if not osp.exists(context_filepath):
             continue
         station_names.append(station_name)
-        dscreator.build_datasheet_for_station(station_name)
 
-        break
+        dscreator.build_datasheet_for_station(station_name)
