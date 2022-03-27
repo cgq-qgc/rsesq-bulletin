@@ -336,7 +336,12 @@ def plot_cross_corr(std_indexes):
     fig, ax = plt.subplots(figsize=(6, 4))
 
     ax.plot(shifts, corrcoeffs, marker='.', zorder=100)
-    ax.axvline(shifts[np.argmax(corrcoeffs)], color='red', zorder=10)
+
+    # Plot a vertical line to identify the positive shift where the
+    # correlation coefficient is maximum.
+    _corrcoeffs = np.array(corrcoeffs)
+    _corrcoeffs[shifts < 0] = -999
+    ax.axvline(shifts[np.argmax(_corrcoeffs)], color='red', zorder=10)
 
     ax.set_ylabel('Corrélation', labelpad=15, fontsize=14)
     ax.set_xlabel('Décalage SPLI p/r SPI (mois)', labelpad=10, fontsize=14)
