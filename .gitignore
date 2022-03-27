@@ -15,6 +15,7 @@ trash/*
 */master_recession_curve/Météo/*
 */master_recession_curve/Niveaux/*
 
+fiche_*.pdf
 fiches-rsesq.pdf
 precip_daily_*.csv
 waterlevels_daily_*.csv

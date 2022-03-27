@@ -210,48 +210,50 @@ class StationDataSheet(object):
 
 class DataSheetCreator(object):
 
-    def __init__(self, workdir):
-        super().__init__()
+    def __init__(self, workdir, db_filename, logs_filename, sda_filename):
         self.workdir = workdir
+        self.db_filename = db_filename
+        self.logs_filename = logs_filename
+        self.sda_filename = sda_filename
 
         self._dirphoto = osp.join(
-            self.workdir, 'fiches', "img_photos_puits")
+            self.workdir, "img_photos_puits")
         if not osp.exists(self._dirphoto):
             os.makedirs(self._dirphoto)
         self._dircontext = osp.join(
-            self.workdir, 'fiches', "img_matrices_contexte")
+            self.workdir, "img_matrices_contexte")
         if not osp.exists(self._dircontext):
             os.makedirs(self._dircontext)
         self._dirhstat = osp.join(
-            self.workdir, 'fiches', "img_hydrogrammes_statistiques")
+            self.workdir, "img_hydrogrammes_statistiques")
         if not osp.exists(self._dirhstat):
             os.makedirs(self._dirhstat)
         self._dirhgraph = osp.join(
-            self.workdir, 'fiches', "img_hydrogrammes")
+            self.workdir, "img_hydrogrammes")
         if not osp.exists(self._dirhgraph):
             os.makedirs(self._dirhgraph)
         self._dirschema = osp.join(
-            self.workdir, 'fiches', "img_schema_puits")
+            self.workdir, "img_schema_puits")
         if not osp.exists(self._dirschema):
             os.makedirs(self._dirschema)
         self._dirbrf = osp.join(
-            self.workdir, 'fiches', "img_fonction_reponse_baro")
+            self.workdir, "img_fonction_reponse_baro")
         if not osp.exists(self._dirbrf):
             os.makedirs(self._dirbrf)
         self._dirlocal = osp.join(
-            self.workdir, 'fiches', "img_cartes_localisation_puits")
+            self.workdir, "img_cartes_localisation_puits")
         if not osp.exists(self._dirlocal):
             os.makedirs(self._dirlocal)
 
         self.munic_s = gpd.read_file(
-            osp.join(self.workdir, "SDA_ 2018-05-25.gdb.zip"),
+            osp.join(self.workdir, self.sda_filename),
             driver='FileGDB',
             layer='munic_s')
 
         self.dbaccessor = DatabaseAccessorSardesLite(
-            osp.join(self.workdir, "rsesq_prod_28-06-2021.db"))
-        self.stations = self.dbaccessor.get_observation_wells_data()
-        self.repere_data = self.dbaccessor.get_repere_data()
+            osp.join(self.workdir, self.db_filename))
+        self.stations = self.dbaccessor.get('observation_wells_data')
+        self.repere_data = self.dbaccessor.get('repere_data')
 
     def datasheet(self, station_name):
         station_data = self.stations[
@@ -300,7 +302,7 @@ class DataSheetCreator(object):
 
     def get_strati_for_station(self, station_name):
         strati_data = pd.read_excel(
-            osp.join(self.workdir, "Logs_complet_06-2021.xlsx"),
+            osp.join(self.workdir, self.logs_filename),
             sheet_name='STRATIGRAPHIE')
         station_strati = (
             strati_data[strati_data['PointID'] == station_name].copy())
@@ -422,7 +424,7 @@ class DataSheetCreator(object):
             ).replace('\\', '/')
         if not osp.exists(pathlocal):
             pathlocal = osp.join(
-                self.workdir, 'fiches', "contexte_puits_non_disponible.pdf"
+                self.workdir, "contexte_puits_non_disponible.pdf"
                 ).replace('\\', '/')
 
         pathhgraph = ''
@@ -454,7 +456,7 @@ class DataSheetCreator(object):
             ).replace('\\', '/')
         if not osp.exists(pathphoto):
             pathphoto = osp.join(
-                self.workdir, 'fiches', "photo_non_disponible.pdf"
+                self.workdir, "photo_non_disponible.pdf"
                 ).replace('\\', '/')
 
         pathbrf = osp.join(
@@ -522,7 +524,7 @@ class DataSheetCreator(object):
             r"\newcommand{\inputpagesix}{}")
         content.append("")
 
-        filename = osp.join(self.workdir, 'fiches', 'fiches-rsesq-station.tex')
+        filename = osp.join(self.workdir, 'fiches-rsesq-station.tex')
         with open(filename, 'w', encoding='utf8') as textfile:
             textfile.write('\n'.join(content))
 
@@ -535,17 +537,12 @@ class DataSheetCreator(object):
         # properly generated.
         subprocess.run(
             'xelatex.exe -synctex=1 -interaction=nonstopmode "fiches-rsesq.tex"',
-            cwd=osp.join(self.workdir, 'fiches')
-            )
-        subprocess.run(
-            'xelatex.exe -synctex=1 -interaction=nonstopmode "fiches-rsesq.tex"',
-            cwd=osp.join(self.workdir, 'fiches')
-            )
+            cwd=osp.join(self.workdir, 'latex'))
 
         src = osp.join(
-            self.workdir, 'fiches', "fiches-rsesq.pdf")
+            self.workdir, 'latex', "fiches-rsesq.pdf")
         dst = osp.join(
-            self.workdir, 'fiches', 'pdf_fiches_stations',
+            self.workdir, 'pdf_fiches_stations',
             "fiche_{}.pdf".format(station_name))
         if not osp.exists(osp.dirname(dst)):
             os.makedirs(osp.dirname(dst))
@@ -556,7 +553,11 @@ class DataSheetCreator(object):
 
 
 if __name__ == '__main__':
-    dscreator = DataSheetCreator(workdir=osp.dirname(__file__))
+    dscreator = DataSheetCreator(
+        workdir=osp.dirname(__file__),
+        db_filename="rsesq_prod_2022-02-22.db",
+        logs_filename="Logs_complet_06-2021.xlsx",
+        sda_filename="SDA_ 2018-05-25.gdb.zip")
 
     station_names = []
     for index, data in dscreator.stations.iterrows():
@@ -568,3 +569,5 @@ if __name__ == '__main__':
             continue
         station_names.append(station_name)
         dscreator.build_datasheet_for_station(station_name)
+
+        break
