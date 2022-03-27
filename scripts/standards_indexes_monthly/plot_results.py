@@ -112,7 +112,7 @@ def plot_spli_overview(staname, wlvl_daily, precip_daily, std_indexes):
 
     axs[1].plot(precip.index, precip['precip'].values,
                 marker='o', color=COLORS['blue dark'], ls='--', zorder=100,
-                label='Précipitations annuelles')
+                label='Précipitations annuelles', ms=5)
     axs[1].set_ylabel("Précipitations (mm)")
 
     # Plot total precip yearly normal.
