@@ -170,6 +170,7 @@ precip_win = 6
 
 figures_stack = []
 std_indexes_stack = []
+staname_stack = []
 # for staname in selected_stations:
 for staname in ['03040018']:
     std_indexes, figures = calc_std_indexes(
@@ -178,19 +179,25 @@ for staname in ['03040018']:
         wlvl_win=wlvl_win)
     figures_stack.append(figures)
     std_indexes_stack.append(std_indexes)
+    staname_stack.append(staname)
 
 DIRNAME = osp.join(osp.dirname(__file__), 'results_std_indexes')
 os.makedirs(DIRNAME, exist_ok=True)
 
 FILENAMES = [
-    f'(spli{wlvl_win}_spi{precip_win}) spi_vs_spli.pdf',
-    f'(spli{wlvl_win}_spi{precip_win}) pdf_niveau.pdf',
-    f'(spli{wlvl_win}_spi{precip_win}) pdf_precip.pdf',
-    f'(spli{wlvl_win}_spi{precip_win}) correlation_croisee.pdf',
-    f'(spli{wlvl_win}_spi{precip_win}) spli_vs_classes.pdf']
+    f'(spli{wlvl_win}_spi{precip_win}) spi_vs_spli',
+    f'(spli{wlvl_win}_spi{precip_win}) pdf_niveau',
+    f'(spli{wlvl_win}_spi{precip_win}) pdf_precip',
+    f'(spli{wlvl_win}_spi{precip_win}) correlation_croisee',
+    f'(spli{wlvl_win}_spi{precip_win}) spli_vs_classes']
+
+for figures, staname in zip(figures_stack, staname_stack):
+    for fig, filename in zip(figures, FILENAMES):
+        fig.savefig(osp.join(
+            DIRNAME, staname + '_' + filename + '.svg'))
+
 for i, filename in enumerate(FILENAMES):
-    filepath = osp.join(DIRNAME, filename)
-    with PdfPages(filepath) as pdf:
+    with PdfPages(osp.join(DIRNAME, filename + '.pdf')) as pdf:
         for figures in figures_stack:
             pdf.savefig(figures[i])
 
