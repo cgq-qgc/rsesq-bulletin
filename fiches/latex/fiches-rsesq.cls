@@ -113,10 +113,12 @@
       \fontsize{18}{24}\color{textheader}%
       {\bodyfont \thepage~de~\pageref{LastPage}}
     };
-    \node [anchor=north west, xshift=1cm] (note) at (box.south west) {%
-      \notefont{Créé le 2021-04-28, MELCC, Direction de l'eau potable et des 
-                eaux souterraines}
-    };
+    \ifnum \thepage=1 {%
+      \node [anchor=north west, xshift=1cm] (note) at (box.south west) {%
+        \notefont{Créé le 2021-04-28, MELCC, Direction de l'eau potable et des 
+                  eaux souterraines}
+      };
+    }\fi
   \end{tikzpicture}
 }
 
