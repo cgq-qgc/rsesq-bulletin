@@ -102,9 +102,6 @@
     \node [anchor=west][xshift=1cm] (logo) at (box.west) {%
       {\includegraphics[height=0.9cm]{./signature-PIV.pdf}}
     };
-    \node [align=left, anchor=west, text width=\paperwidth][xshift=0.5cm] (name1) at (logo.east) {%
-      \fontsize{12}{14}\color{textheader}\bodyfont {Environnement et Lutte \\ contre les changements climatiques}
-    };
     \node [anchor=east][xshift=-1cm] (page) at (box.east) {%
       \fontsize{14}{24}\color{textheader}%
       {\bodyfont \thepage~de~\pageref{LastPage}}
