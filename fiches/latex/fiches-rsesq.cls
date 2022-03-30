@@ -19,7 +19,7 @@
 
 \newcommand{\classleftmargin}{1cm}
 \newcommand{\classrightmargin}{1cm}
-\newcommand{\classtopmargin}{4.5cm}
+\newcommand{\classtopmargin}{4cm}
 \newcommand{\classbottommargin}{3.25cm}
 \newcommand{\classpaperheight}{11in}
 \newcommand{\classpaperwidth}{8.5in}
@@ -81,16 +81,14 @@
 %\fancyhf{}
 %\renewcommand{\headrulewidth}{0pt}
 
-\newcommand{\header}[2]{%
+\newcommand{\header}[1]{%
   \begin{tikzpicture}[remember picture, overlay]
-    \node [rectangle, fill=fillheader, anchor=north, minimum width=\paperwidth, minimum height=2.5cm, yshift=-1cm] (box) at (current page.north){};
-    \node [anchor=center, yshift=8pt] (name) at (box) {%
+    \node [rectangle, fill=fillheader, anchor=north, minimum 
+    width=\paperwidth, minimum height=2cm, yshift=-1cm] (box) at (current 
+    page.north){};
+    \node [anchor=center, yshift=0pt] (name) at (box) {%
       \fontsize{40pt}{72pt}\color{textheader}%
       \bodyfont Station #1
-    };
-    \node [anchor=north] at (name.south) {%
-      \fontsize{16pt}{24pt}\color{textheader}%
-      \thinfont Municipalité de #2%
     };
   \end{tikzpicture}
   \vspace{-2em}
@@ -117,9 +115,9 @@
 }
 
 \RequirePackage{atbegshi}
-\newcommand{\createfooterheader}[2]{%
+\newcommand{\createfooterheader}[1]{%
     \AtBeginShipout{\AtBeginShipoutAddToBox{%
-      \header{#1}{#2}
+      \header{#1}
       \footer
     }}
 }
