@@ -20,7 +20,7 @@
 \newcommand{\classleftmargin}{1cm}
 \newcommand{\classrightmargin}{1cm}
 \newcommand{\classtopmargin}{4cm}
-\newcommand{\classbottommargin}{3.25cm}
+\newcommand{\classbottommargin}{3.75cm}
 \newcommand{\classpaperheight}{11in}
 \newcommand{\classpaperwidth}{8.5in}
 
@@ -96,7 +96,9 @@
 
 \newcommand{\footer}[0]{%
   \begin{tikzpicture}[remember picture, overlay]
-    \node [rectangle, fill=fillheader, anchor=south west, minimum width=\paperwidth, minimum height=1.25cm, yshift=1cm] (box) at (current page.south west){};
+    \node [rectangle, fill=fillheader, anchor=south west, minimum 
+    width=\paperwidth, minimum height=1.75cm, yshift=1cm] (box) at (current 
+    page.south west){};
     \node [anchor=west][xshift=1cm] (logo) at (box.west) {%
       {\includegraphics[height=0.9cm]{./signature-PIV.pdf}}
     };
