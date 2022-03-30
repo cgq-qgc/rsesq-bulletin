@@ -99,11 +99,18 @@
     \node [rectangle, fill=fillheader, anchor=south west, minimum 
     width=\paperwidth, minimum height=1.75cm, yshift=1cm] (box) at (current 
     page.south west){};
-    \node [anchor=west][xshift=1cm] (logo) at (box.west) {%
-      {\includegraphics[height=0.9cm]{./signature-PIV.pdf}}
-    };
-    \node [anchor=east][xshift=-1cm] (page) at (box.east) {%
-      \fontsize{14}{24}\color{textheader}%
+    \ifnum \thepage=1 {%
+      \node [anchor=east][xshift=-1cm] (logo) at (box.east) {%
+        {\includegraphics[height=0.9cm]{./signature-PIV.pdf}}
+      };
+    }\fi
+    \ifnum \thepage=\pageref{LastPage} {%
+      \node [anchor=west][xshift=1cm] (logo) at (box.west) {%
+        {\includegraphics[height=0.9cm]{./signature-PIV.pdf}}
+      };
+    }\fi
+    \node [anchor=center][xshift=0cm] (page) at (box.center) {%
+      \fontsize{18}{24}\color{textheader}%
       {\bodyfont \thepage~de~\pageref{LastPage}}
     };
     \node [anchor=north west, xshift=1cm] (note) at (box.south west) {%
