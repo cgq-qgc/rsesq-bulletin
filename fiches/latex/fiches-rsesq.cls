@@ -19,8 +19,8 @@
 
 \newcommand{\classleftmargin}{1cm}
 \newcommand{\classrightmargin}{1cm}
-\newcommand{\classtopmargin}{4.5cm}
-\newcommand{\classbottommargin}{3.25cm}
+\newcommand{\classtopmargin}{4cm}
+\newcommand{\classbottommargin}{3.75cm}
 \newcommand{\classpaperheight}{11in}
 \newcommand{\classpaperwidth}{8.5in}
 
@@ -81,16 +81,14 @@
 %\fancyhf{}
 %\renewcommand{\headrulewidth}{0pt}
 
-\newcommand{\header}[2]{%
+\newcommand{\header}[1]{%
   \begin{tikzpicture}[remember picture, overlay]
-    \node [rectangle, fill=fillheader, anchor=north, minimum width=\paperwidth, minimum height=2.5cm, yshift=-1cm] (box) at (current page.north){};
-    \node [anchor=center, yshift=8pt] (name) at (box) {%
+    \node [rectangle, fill=fillheader, anchor=north, minimum 
+    width=\paperwidth, minimum height=2cm, yshift=-1cm] (box) at (current 
+    page.north){};
+    \node [anchor=center, yshift=0pt] (name) at (box) {%
       \fontsize{40pt}{72pt}\color{textheader}%
       \bodyfont Station #1
-    };
-    \node [anchor=north] at (name.south) {%
-      \fontsize{16pt}{24pt}\color{textheader}%
-      \thinfont Municipalité de #2%
     };
   \end{tikzpicture}
   \vspace{-2em}
@@ -98,28 +96,36 @@
 
 \newcommand{\footer}[0]{%
   \begin{tikzpicture}[remember picture, overlay]
-    \node [rectangle, fill=fillheader, anchor=south west, minimum width=\paperwidth, minimum height=1.25cm, yshift=1cm] (box) at (current page.south west){};
-    \node [anchor=west][xshift=1cm] (logo) at (box.west) {%
-      {\includegraphics[height=0.9cm]{./signature-PIV.pdf}}
-    };
-    \node [align=left, anchor=west, text width=\paperwidth][xshift=0.5cm] (name1) at (logo.east) {%
-      \fontsize{12}{14}\color{textheader}\bodyfont {Environnement et Lutte \\ contre les changements climatiques}
-    };
-    \node [anchor=east][xshift=-1cm] (page) at (box.east) {%
-      \fontsize{14}{24}\color{textheader}%
+    \node [rectangle, fill=fillheader, anchor=south west, minimum 
+    width=\paperwidth, minimum height=1.75cm, yshift=1cm] (box) at (current 
+    page.south west){};
+    \ifnum \thepage=1 {%
+      \node [anchor=east][xshift=-1cm] (logo) at (box.east) {%
+        {\includegraphics[height=0.9cm]{./signature-PIV.pdf}}
+      };
+    }\fi
+    \ifnum \thepage=\pageref{LastPage} {%
+      \node [anchor=west][xshift=1cm] (logo) at (box.west) {%
+        {\includegraphics[height=0.9cm]{./signature-PIV.pdf}}
+      };
+    }\fi
+    \node [anchor=center][xshift=0cm] (page) at (box.center) {%
+      \fontsize{18}{24}\color{textheader}%
       {\bodyfont \thepage~de~\pageref{LastPage}}
     };
-    \node [anchor=north west, xshift=1cm] (note) at (box.south west) {%
-      \notefont{Créé le 2021-04-28, MELCC, Direction de l'eau potable et des 
-                eaux souterraines}
-    };
+    \ifnum \thepage=1 {%
+      \node [anchor=north west, xshift=1cm] (note) at (box.south west) {%
+        \notefont{Créé le 2021-04-28, MELCC, Direction de l'eau potable et des 
+                  eaux souterraines}
+      };
+    }\fi
   \end{tikzpicture}
 }
 
 \RequirePackage{atbegshi}
-\newcommand{\createfooterheader}[2]{%
+\newcommand{\createfooterheader}[1]{%
     \AtBeginShipout{\AtBeginShipoutAddToBox{%
-      \header{#1}{#2}
+      \header{#1}
       \footer
     }}
 }
