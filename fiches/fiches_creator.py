@@ -114,7 +114,10 @@ class StationDataSheet(object):
             self.formatted_data = format_reading_data(
                 readings_data, repere_data)
         else:
-            self.formatted_data = pd.DataFrame([], dtype=object)
+            self.formatted_data = pd.DataFrame(
+                [],
+                columns=[DataType.WaterLevel, 'datetime'],
+                dtype=object)
 
         self.wlevels = (
             self.formatted_data[[DataType.WaterLevel, 'datetime']]
@@ -127,6 +130,8 @@ class StationDataSheet(object):
 
     def _calcul_type_aquifer_nappe(self):
         if self.strati_data.empty:
+            return 'N.D.'
+        if self.wlevels.empty:
             return 'N.D.'
 
         top_masl = self.ground_altitude - self.strati_data['Depth']
