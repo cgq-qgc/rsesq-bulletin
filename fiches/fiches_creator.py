@@ -126,6 +126,9 @@ class StationDataSheet(object):
         self.type_aquifer_nappe = self._calcul_type_aquifer_nappe()
 
     def _calcul_type_aquifer_nappe(self):
+        if self.strati_data.empty:
+            return 'N.D.'
+
         top_masl = self.ground_altitude - self.strati_data['Depth']
         bottom_masl = self.ground_altitude - self.strati_data['Bottom']
 
