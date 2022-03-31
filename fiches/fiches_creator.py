@@ -540,6 +540,9 @@ class DataSheetCreator(object):
         subprocess.run(
             'xelatex.exe -synctex=1 -interaction=nonstopmode "fiches-rsesq.tex"',
             cwd=osp.join(self.workdir, 'latex'))
+        subprocess.run(
+            'xelatex.exe -synctex=1 -interaction=nonstopmode "fiches-rsesq.tex"',
+            cwd=osp.join(self.workdir, 'latex'))
 
         src = osp.join(self.workdir, 'latex', "fiches-rsesq.pdf")
         dst = osp.join(self.outdir, "fiche_{}.pdf".format(station_name))
