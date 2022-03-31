@@ -339,7 +339,7 @@ class DataSheetCreator(object):
                 typenappe = 'nd'
             elif is_influenced == 'oui':
                 typenappe = "influencée"
-            elif is_influenced is False:
+            elif is_influenced == 'non':
                 typenappe = "non influencée"
         else:
             typenappe = confinement
